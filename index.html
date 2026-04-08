@@ -1,11 +1,990 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <title>My App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuki Tanaka — iOS Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --bg2: #111114;
+    --bg3: #18181d;
+    --text: #f0eee8;
+    --muted: #888880;
+    --accent: #c8a96e;
+    --accent2: #e8d4a8;
+    --border: rgba(200,169,110,0.15);
+    --border2: rgba(240,238,232,0.08);
+    --radius: 2px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s, background 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,11,0.85);
+    border-color: var(--border2);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HAMBURGER (mobile) ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--text);
+    transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,11,0.97);
+    z-index: 99;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 7rem 4rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 4rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-circle {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
+    top: 10%;
+    right: -10%;
+    pointer-events: none;
+  }
+  .hero-kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.9s 0.35s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 400px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s 0.65s forwards;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    background: var(--accent);
+    color: #0a0a0b;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+  .btn-ghost {
+    color: var(--muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s;
+  }
+  .btn-ghost:hover { color: var(--text); }
+  .btn-ghost::after { content: '→'; transition: transform 0.3s; }
+  .btn-ghost:hover::after { transform: translateX(4px); }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    writing-mode: vertical-rl;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 1s 1s forwards;
+  }
+  .hero-scroll-hint::before {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollLine 2s 1.5s infinite;
+  }
+
+  /* ── LABEL ── */
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 2rem;
+  }
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: var(--accent);
+    margin-bottom: 3rem;
+    opacity: 0.5;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .about-left { position: relative; }
+  .about-photo-wrap {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+  }
+  .about-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--muted);
+  }
+  .photo-icon {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+  .about-photo-placeholder p { font-size: 0.75rem; letter-spacing: 0.1em; }
+  .about-tag {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    background: var(--accent);
+    color: #0a0a0b;
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .about-body p { color: #b8b6b0; margin-bottom: 1.5rem; line-height: 1.9; }
+  .about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border2);
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; letter-spacing: 0.05em; }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--bg); }
+  .skills-intro { max-width: 600px; margin-bottom: 4rem; color: var(--muted); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--border2);
+  }
+  .skill-card {
+    background: var(--bg);
+    padding: 2.5rem 2rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.4s;
+  }
+  .skill-card:hover { background: var(--bg2); }
+  .skill-card:hover::before { height: 100%; }
+  .skill-icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    opacity: 0.6;
+    margin-bottom: 1.5rem;
+  }
+  .skill-name {
+    font-size: 1.05rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+  }
+  .skill-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── WORK ── */
+  #work { background: var(--bg2); }
+  .work-grid { display: flex; flex-direction: column; gap: 6rem; }
+  .work-item {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .work-item.visible { opacity: 1; transform: none; }
+  .work-item:nth-child(even) { direction: rtl; }
+  .work-item:nth-child(even) > * { direction: ltr; }
+  .work-screens {
+    position: relative;
+    height: 420px;
+  }
+  .phone-frame {
+    position: absolute;
+    width: 180px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 9/19;
+  }
+  .phone-frame .screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: var(--muted);
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 1rem;
+  }
+  .phone-screen-icon { font-size: 2rem; }
+  .phone1 { top: 20px; left: 20px; z-index: 2; }
+  .phone2 { top: 60px; left: 130px; z-index: 1; opacity: 0.6; filter: blur(1px); }
+  .work-body .app-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .work-body h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+  .work-body p { color: var(--muted); margin-bottom: 2rem; }
+  .work-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .work-meta-item { font-size: 0.75rem; color: var(--muted); }
+  .work-meta-item strong { display: block; color: var(--text); font-size: 0.85rem; font-weight: 400; margin-bottom: 0.2rem; }
+  .appstore-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .appstore-btn:hover { border-color: var(--accent); background: rgba(200,169,110,0.05); }
+  .appstore-logo { font-size: 1.4rem; }
+
+  /* ── PROCESS ── */
+  #process { background: var(--bg); }
+  .process-steps { display: flex; flex-direction: column; }
+  .process-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border2);
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .process-step.visible { opacity: 1; transform: none; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    color: var(--border);
+    line-height: 1;
+    font-weight: 400;
+    transition: color 0.3s;
+  }
+  .process-step:hover .step-num { color: var(--accent); }
+  .step-content h4 { font-size: 1.1rem; font-weight: 400; margin-bottom: 0.75rem; }
+  .step-content p { color: var(--muted); font-size: 0.9rem; }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--bg2);
+    text-align: center;
+  }
+  .contact-inner { max-width: 600px; margin: 0 auto; }
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .contact-title em { font-style: italic; color: var(--accent); }
+  .contact-sub { color: var(--muted); margin-bottom: 3rem; }
+  .contact-email {
+    display: inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.25rem;
+    margin-bottom: 3rem;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .contact-email:hover { color: var(--accent); border-color: var(--accent); }
+  .contact-socials { display: flex; justify-content: center; gap: 2rem; }
+  .social-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .social-link:hover { color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid var(--border2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, opacity 0.2s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(200,169,110,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease-out;
+  }
+  body:has(a:hover) .cursor { width: 14px; height: 14px; }
+  body:has(a:hover) .cursor-ring { width: 44px; height: 44px; border-color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 2rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 5rem 2rem; }
+    #hero { padding: 0 2rem 5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about-tag { right: 0; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .work-item { grid-template-columns: 1fr; gap: 3rem; }
+    .work-item:nth-child(even) { direction: ltr; }
+    .work-screens { height: 300px; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .cursor, .cursor-ring { display: none; }
+  }
+  @media (max-width: 600px) {
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .contact-socials { flex-wrap: wrap; }
+  }
+</style>
 </head>
 <body>
-  <h1>Hello!</h1>
-  <p>This is my website.</p>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">YT.</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mobile-nav-link">About</a>
+  <a href="#skills" class="mobile-nav-link">Skills</a>
+  <a href="#work" class="mobile-nav-link">Work</a>
+  <a href="#process" class="mobile-nav-link">Process</a>
+  <a href="#contact" class="mobile-nav-link">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-circle"></div>
+  <div class="hero-kicker">iOS App Developer · Freelance</div>
+  <h1 class="hero-title">あなたのアイデアを<br><em>iOSアプリ</em>に。</h1>
+  <p class="hero-sub">Swift / SwiftUI で、使いやすく・美しい App Store アプリを一人で設計・開発・リリースまで担います。</p>
+  <div class="hero-cta">
+    <a href="#work" class="btn-primary">実績を見る</a>
+    <a href="#contact" class="btn-ghost">相談する</a>
+  </div>
+  <div class="hero-scroll-hint">Scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-left reveal">
+        <div class="about-photo-wrap">
+          <!-- プロフィール写真をここに配置 <img src="photo.jpg" style="width:100%;height:100%;object-fit:cover;"> -->
+          <div class="about-photo-placeholder">
+            <div class="photo-icon">👤</div>
+            <p>プロフィール写真<br>を配置</p>
+          </div>
+        </div>
+        <div class="about-tag">iOS Developer</div>
+      </div>
+      <div class="about-body reveal">
+        <div class="section-label">About</div>
+        <h2 class="section-title">iOS一本に<br>集中するから、<br>品質が違う。</h2>
+        <div class="divider"></div>
+        <p>はじめまして、田中 優希（Yuki Tanaka）です。フリーランスのiOSアプリ開発者として、個人向け・小規模チーム向けのApp Storeアプリを専門に手がけています。</p>
+        <p>受託の幅を広げるより、iOSに絞って深く追求することを選びました。UIの細部、パフォーマンス、Apple審査の流れまで、すべてを一人でコントロールすることで、大規模組織では出しにくいスピードと品質を実現します。</p>
+        <div class="about-stats">
+          <div>
+            <div class="stat-num" data-count="12">0</div>
+            <div class="stat-label">公開アプリ数</div>
+          </div>
+          <div>
+            <div class="stat-num" data-count="5">0</div>
+            <div class="stat-label">開発年数</div>
+          </div>
+          <div>
+            <div class="stat-num" data-count="98">0</div>
+            <div class="stat-label">% 審査通過率</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label">Skills & Stack</div>
+    <h2 class="section-title">使う技術</h2>
+    <div class="divider"></div>
+    <p class="skills-intro">Apple プラットフォームのベストプラクティスを軸に、フロントからバックエンド連携・ストア申請まで完結します。</p>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">01 /</div>
+        <div class="skill-name">UI / UX 設計</div>
+        <p class="skill-desc">Human Interface Guidelines に準拠した直感的な UI を Figma で設計。ユーザーが迷わない導線を最優先します。</p>
+        <div class="skill-tags"><span class="tag">SwiftUI</span><span class="tag">UIKit</span><span class="tag">Figma</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">02 /</div>
+        <div class="skill-name">ネイティブ開発</div>
+        <p class="skill-desc">Swift を中心に、モダンな Concurrency・Combine・SwiftData を活用。パフォーマンスと保守性を両立します。</p>
+        <div class="skill-tags"><span class="tag">Swift</span><span class="tag">Xcode</span><span class="tag">SwiftData</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">03 /</div>
+        <div class="skill-name">バックエンド連携</div>
+        <p class="skill-desc">Firebase・Supabase を活用したサーバーレス構成を得意とします。REST API・GraphQL との連携も対応。</p>
+        <div class="skill-tags"><span class="tag">Firebase</span><span class="tag">Supabase</span><span class="tag">REST</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">04 /</div>
+        <div class="skill-name">収益化 / 課金</div>
+        <p class="skill-desc">StoreKit 2 によるサブスクリプション・買い切り実装。RevenueCat を使った分析・A/B テストも対応。</p>
+        <div class="skill-tags"><span class="tag">StoreKit 2</span><span class="tag">RevenueCat</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">05 /</div>
+        <div class="skill-name">通知 / Widget</div>
+        <p class="skill-desc">Push 通知・ライブアクティビティ・ホーム画面ウィジェット (WidgetKit) の実装で、アプリの継続利用率を高めます。</p>
+        <div class="skill-tags"><span class="tag">WidgetKit</span><span class="tag">APNs</span></div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">06 /</div>
+        <div class="skill-name">審査 / リリース</div>
+        <p class="skill-desc">App Store Connect の設定からメタデータ・スクリーンショット最適化、審査対応まで一貫してサポート。</p>
+        <div class="skill-tags"><span class="tag">App Store Connect</span><span class="tag">ASO</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="container">
+    <div class="section-label">Selected Work</div>
+    <h2 class="section-title">制作実績</h2>
+    <div class="divider"></div>
+    <div class="work-grid">
+
+      <!-- App 1 -->
+      <div class="work-item reveal">
+        <div class="work-screens">
+          <div class="phone-frame phone1">
+            <div class="screen">
+              <!-- スクリーンショット画像を配置 -->
+              <!-- <img src="app1-screen1.png" style="width:100%;height:100%;object-fit:cover;"> -->
+              <div class="phone-screen-icon">🗓️</div>
+              <div>スクリーンショット<br>を配置</div>
+            </div>
+          </div>
+          <div class="phone-frame phone2">
+            <div class="screen">
+              <div class="phone-screen-icon">📊</div>
+            </div>
+          </div>
+        </div>
+        <div class="work-body">
+          <div class="app-label">Habit Tracker</div>
+          <h3>DailyLoop</h3>
+          <p>毎日の習慣を可視化するシンプルなトラッカー。SwiftUI + SwiftData で快適なオフライン動作を実現。iCloud 同期対応。</p>
+          <div class="work-meta">
+            <div class="work-meta-item"><strong>カテゴリ</strong>ライフスタイル</div>
+            <div class="work-meta-item"><strong>期間</strong>3ヶ月</div>
+            <div class="work-meta-item"><strong>技術</strong>SwiftUI · SwiftData · WidgetKit</div>
+          </div>
+          <a href="#" class="appstore-btn">
+            <span class="appstore-logo">🍎</span>
+            App Store で見る
+          </a>
+        </div>
+      </div>
+
+      <!-- App 2 -->
+      <div class="work-item reveal">
+        <div class="work-screens">
+          <div class="phone-frame phone1">
+            <div class="screen">
+              <div class="phone-screen-icon">💸</div>
+              <div>スクリーンショット<br>を配置</div>
+            </div>
+          </div>
+          <div class="phone-frame phone2">
+            <div class="screen">
+              <div class="phone-screen-icon">📈</div>
+            </div>
+          </div>
+        </div>
+        <div class="work-body">
+          <div class="app-label">Finance</div>
+          <h3>Kakei</h3>
+          <p>ミニマルな家計簿アプリ。レシートのOCR読み取り・カテゴリ分析・月別レポートをシンプルなUIに凝縮。サブスク課金実装済み。</p>
+          <div class="work-meta">
+            <div class="work-meta-item"><strong>カテゴリ</strong>ファイナンス</div>
+            <div class="work-meta-item"><strong>期間</strong>4ヶ月</div>
+            <div class="work-meta-item"><strong>技術</strong>UIKit · Vision · StoreKit 2</div>
+          </div>
+          <a href="#" class="appstore-btn">
+            <span class="appstore-logo">🍎</span>
+            App Store で見る
+          </a>
+        </div>
+      </div>
+
+      <!-- App 3 -->
+      <div class="work-item reveal">
+        <div class="work-screens">
+          <div class="phone-frame phone1">
+            <div class="screen">
+              <div class="phone-screen-icon">🧘</div>
+              <div>スクリーンショット<br>を配置</div>
+            </div>
+          </div>
+          <div class="phone-frame phone2">
+            <div class="screen">
+              <div class="phone-screen-icon">🎵</div>
+            </div>
+          </div>
+        </div>
+        <div class="work-body">
+          <div class="app-label">Wellness</div>
+          <h3>Breathe Space</h3>
+          <p>呼吸法・瞑想をガイドするマインドフルネスアプリ。Live Activity で画面ロック中もタイマーを表示。AVFoundation で環境音を実装。</p>
+          <div class="work-meta">
+            <div class="work-meta-item"><strong>カテゴリ</strong>ヘルスケア</div>
+            <div class="work-meta-item"><strong>期間</strong>2ヶ月</div>
+            <div class="work-meta-item"><strong>技術</strong>SwiftUI · AVFoundation · ActivityKit</div>
+          </div>
+          <a href="#" class="appstore-btn">
+            <span class="appstore-logo">🍎</span>
+            App Store で見る
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="container">
+    <div class="section-label">How I Work</div>
+    <h2 class="section-title">進め方</h2>
+    <div class="divider"></div>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>無料相談・ヒアリング</h4>
+          <p>アイデアの段階でも OK です。作りたいもの・ターゲットユーザー・ご予算の目線合わせを行います。オンライン（30〜60分）で気軽にどうぞ。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>要件定義・見積もり</h4>
+          <p>ヒアリング内容をもとに機能一覧・画面構成を整理し、開発期間と費用の見積もりをご提示します。納得いただけたら契約へ。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>UI デザイン・プロトタイプ</h4>
+          <p>Figma でワイヤーフレーム → 高精度デザインを作成。実機に近いプロトタイプでイメージを確認してから開発着手します。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h4>開発・中間確認</h4>
+          <p>2週間スプリントで進捗共有します。TestFlight を使い、実機で動作確認しながらフィードバックを反映。認識のズレを早期解消します。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <h4>審査申請・リリース</h4>
+          <p>App Store Connect の設定・スクリーンショット・説明文の最適化まで対応。審査リジェクト時の対応・再申請もサポートします。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-num">06</div>
+        <div class="step-content">
+          <h4>リリース後サポート</h4>
+          <p>リリース後 1ヶ月は不具合対応を無償で実施。継続的なアップデートや機能追加は月額保守プランでご提供しています。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="section-label">Contact</div>
+      <h2 class="contact-title">まず、<em>話しましょう</em>。</h2>
+      <p class="contact-sub">アイデアの段階でも、他社で断られた案件でも、気軽にご相談ください。<br>通常 24 時間以内に返信します。</p>
+      <!-- メールアドレスを変更してください -->
+      <a href="mailto:hello@yukitanaka.dev" class="contact-email">hello@yukitanaka.dev</a>
+      <div class="contact-socials">
+        <a href="#" class="social-link">GitHub</a>
+        <a href="#" class="social-link">X (Twitter)</a>
+        <a href="#" class="social-link">LinkedIn</a>
+        <a href="#" class="social-link">Zenn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Yuki Tanaka. All rights reserved.</span>
+  <span>iOSアプリ開発 · フリーランス · 大阪</span>
+</footer>
+
+<script>
+  /* ── CURSOR ── */
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  /* ── NAV SCROLL ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  /* ── HAMBURGER ── */
+  const ham = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-nav-link').forEach(a => {
+    a.addEventListener('click', () => {
+      ham.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  /* ── INTERSECTION OBSERVER (reveal) ── */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal, .work-item, .process-step').forEach(el => observer.observe(el));
+
+  /* ── COUNTER ANIMATION ── */
+  const counterObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = +el.dataset.count;
+      let current = 0;
+      const step = target / 60;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = Math.floor(current) + (el.dataset.suffix || '');
+        if (current >= target) clearInterval(timer);
+      }, 20);
+      counterObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+
+  /* ── HERO PARALLAX ── */
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    const hero = document.getElementById('hero');
+    if (y < window.innerHeight) {
+      hero.querySelector('.hero-bg-circle').style.transform = `translateY(${y * 0.3}px)`;
+    }
+  });
+
+  /* ── SMOOTH NAV ACTIVE ── */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 200) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--accent)' : '';
+    });
+  });
+</script>
 </body>
 </html>
