@@ -1,38 +1,46 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ToggleStudio — iOS Developer</title>
+<meta name="description" content="ToggleStudio — 日本国内でiOSアプリ開発とWEB制作を行う個人クリエイター。認知心理学に基づき、ユーザーの視認性とストレスに配慮した「意味のあるデザイン」を追求。">
+<title>ToggleStudio — iOS App Developer & Web Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0b;
     --bg2: #111114;
     --bg3: #18181d;
+    --bg4: #1d1d23;
     --text: #f0eee8;
+    --text-soft: #c8c6c0;
     --muted: #888880;
+    --muted-dim: #5a5a55;
     --accent: #c8a96e;
     --accent2: #e8d4a8;
-    --border: rgba(200,169,110,0.15);
+    --accent-dim: rgba(200,169,110,0.12);
+    --border: rgba(200,169,110,0.18);
     --border2: rgba(240,238,232,0.08);
     --radius: 2px;
+    --serif: 'Cormorant Garamond', 'Noto Serif JP', serif;
+    --sans: 'DM Sans', 'Hiragino Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--sans);
     font-weight: 300;
     font-size: 16px;
     line-height: 1.7;
     overflow-x: hidden;
   }
+  ::selection { background: var(--accent); color: var(--bg); }
 
-  /* ── NOISE OVERLAY ── */
   body::before {
     content: '';
     position: fixed;
@@ -43,7 +51,6 @@
     z-index: 999;
   }
 
-  /* ── NAV ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -53,32 +60,54 @@
     align-items: center;
     padding: 1.5rem 4rem;
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid transparent;
-    transition: border-color 0.4s, background 0.4s;
+    transition: border-color 0.4s, background 0.4s, padding 0.4s;
   }
   nav.scrolled {
     background: rgba(10,10,11,0.85);
     border-color: var(--border2);
+    padding: 1rem 4rem;
   }
   .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--serif);
     font-size: 1.4rem;
     color: var(--accent);
     letter-spacing: 0.05em;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .nav-logo::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
   }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a {
     color: var(--muted);
     text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -6px;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
   }
   .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
 
-  /* ── HAMBURGER (mobile) ── */
   .hamburger {
     display: none;
     flex-direction: column;
@@ -104,6 +133,7 @@
     position: fixed;
     inset: 0;
     background: rgba(10,10,11,0.97);
+    backdrop-filter: blur(10px);
     z-index: 99;
     flex-direction: column;
     align-items: center;
@@ -114,65 +144,84 @@
   .mobile-menu a {
     color: var(--text);
     text-decoration: none;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--serif);
     font-size: 2.5rem;
     letter-spacing: 0.05em;
   }
 
-  /* ── SECTIONS ── */
-  section { padding: 7rem 4rem; }
+  section { padding: 8rem 4rem; position: relative; }
   .container { max-width: 1100px; margin: 0 auto; }
 
-  /* ── HERO ── */
   #hero {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 0 4rem 6rem;
+    padding: 0 4rem 7rem;
     position: relative;
     overflow: hidden;
   }
   .hero-bg-circle {
     position: absolute;
-    width: 600px;
-    height: 600px;
+    width: 700px;
+    height: 700px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
-    top: 10%;
-    right: -10%;
+    background: radial-gradient(circle, rgba(200,169,110,0.07) 0%, transparent 70%);
+    top: 5%;
+    right: -15%;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,169,110,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,110,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 70%);
     pointer-events: none;
   }
   .hero-kicker {
-    font-size: 0.75rem;
-    letter-spacing: 0.25em;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.8s 0.2s forwards;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3.5rem, 9vw, 8rem);
+  .hero-kicker::before {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .hero-title-jp {
+    font-family: var(--sans);
+    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
     font-weight: 400;
-    line-height: 1.0;
-    letter-spacing: -0.01em;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
     margin-bottom: 2rem;
+    color: var(--text);
     opacity: 0;
     transform: translateY(30px);
     animation: fadeUp 0.9s 0.35s forwards;
   }
-  .hero-title em {
-    font-style: italic;
-    color: var(--accent);
-  }
+  .hero-title-jp .accent { color: var(--accent); }
   .hero-sub {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--muted);
-    max-width: 400px;
+    max-width: 480px;
     margin-bottom: 3rem;
+    line-height: 1.9;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.8s 0.5s forwards;
@@ -181,45 +230,51 @@
     display: flex;
     gap: 1.5rem;
     align-items: center;
+    flex-wrap: wrap;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeUp 0.8s 0.65s forwards;
   }
   .btn-primary {
     display: inline-block;
-    padding: 0.85rem 2.2rem;
+    padding: 0.95rem 2.4rem;
     background: var(--accent);
     color: #0a0a0b;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     text-decoration: none;
     border-radius: var(--radius);
-    transition: background 0.3s, transform 0.2s;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
   }
-  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+  .btn-primary:hover {
+    background: var(--accent2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(200,169,110,0.25);
+  }
   .btn-ghost {
     color: var(--muted);
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
     text-decoration: none;
     text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     transition: color 0.3s;
+    padding: 0.95rem 0;
   }
   .btn-ghost:hover { color: var(--text); }
   .btn-ghost::after { content: '→'; transition: transform 0.3s; }
-  .btn-ghost:hover::after { transform: translateX(4px); }
+  .btn-ghost:hover::after { transform: translateX(6px); }
 
   .hero-scroll-hint {
     position: absolute;
     bottom: 2.5rem;
     right: 4rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--muted);
     writing-mode: vertical-rl;
@@ -238,30 +293,71 @@
     animation: scrollLine 2s 1.5s infinite;
   }
 
-  /* ── LABEL ── */
   .section-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+    display: inline-block;
   }
   .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
     font-weight: 400;
-    line-height: 1.15;
+    line-height: 1.3;
     margin-bottom: 2rem;
+    letter-spacing: 0.01em;
   }
+  .section-title em { font-style: italic; color: var(--accent); }
   .divider {
-    width: 60px;
+    width: 50px;
     height: 1px;
     background: var(--accent);
     margin-bottom: 3rem;
     opacity: 0.5;
   }
 
-  /* ── ABOUT ── */
+  #philosophy {
+    background: var(--bg);
+    padding: 9rem 4rem;
+    text-align: center;
+  }
+  .philosophy-quote { max-width: 800px; margin: 0 auto; }
+  .philosophy-mark {
+    font-family: var(--serif);
+    font-size: 5rem;
+    color: var(--accent);
+    line-height: 0.5;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+  }
+  .philosophy-text {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--text);
+    font-style: italic;
+    margin-bottom: 2.5rem;
+  }
+  .philosophy-text .accent { color: var(--accent); font-style: normal; }
+  .philosophy-author {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
   #about { background: var(--bg2); }
   .about-grid {
     display: grid;
@@ -307,11 +403,19 @@
     background: var(--accent);
     color: #0a0a0b;
     padding: 1rem 1.5rem;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    z-index: 2;
   }
-  .about-body p { color: #b8b6b0; margin-bottom: 1.5rem; line-height: 1.9; }
+  .about-body p {
+    color: var(--text-soft);
+    margin-bottom: 1.5rem;
+    line-height: 1.95;
+    font-size: 0.95rem;
+  }
+  .about-body p strong { color: var(--accent); font-weight: 400; }
   .about-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -321,30 +425,36 @@
     border-top: 1px solid var(--border2);
   }
   .stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.5rem;
+    font-family: var(--serif);
+    font-size: 2.8rem;
     color: var(--accent);
     line-height: 1;
+    font-weight: 500;
   }
-  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; letter-spacing: 0.05em; }
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 
-  /* ── SKILLS ── */
-  #skills { background: var(--bg); }
-  .skills-intro { max-width: 600px; margin-bottom: 4rem; color: var(--muted); }
-  .skills-grid {
+  #principles { background: var(--bg); }
+  .principles-intro { max-width: 600px; margin-bottom: 4rem; color: var(--muted); }
+  .principles-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5px;
     background: var(--border2);
   }
-  .skill-card {
+  .principle-card {
     background: var(--bg);
-    padding: 2.5rem 2rem;
-    transition: background 0.3s;
+    padding: 3rem 2.5rem;
+    transition: background 0.4s;
     position: relative;
     overflow: hidden;
   }
-  .skill-card::before {
+  .principle-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0;
@@ -353,34 +463,78 @@
     background: var(--accent);
     transition: height 0.4s;
   }
-  .skill-card:hover { background: var(--bg2); }
-  .skill-card:hover::before { height: 100%; }
-  .skill-icon {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
+  .principle-card:hover { background: var(--bg2); }
+  .principle-card:hover::before { height: 100%; }
+  .principle-num {
+    font-family: var(--mono);
+    font-size: 0.7rem;
     color: var(--accent);
     opacity: 0.6;
+    margin-bottom: 2rem;
+    letter-spacing: 0.1em;
+  }
+  .principle-name {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+  .principle-name .accent { color: var(--accent); font-style: italic; }
+  .principle-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  #services { background: var(--bg2); }
+  .services-intro { max-width: 600px; margin-bottom: 4rem; color: var(--muted); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5px;
+    background: var(--border2);
+  }
+  .service-card {
+    background: var(--bg2);
+    padding: 3rem 2.5rem;
+    transition: background 0.4s;
+    position: relative;
+  }
+  .service-card:hover { background: var(--bg3); }
+  .service-icon {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+  }
+  .service-name {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+  .service-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
     margin-bottom: 1.5rem;
   }
-  .skill-name {
-    font-size: 1.05rem;
-    font-weight: 400;
-    margin-bottom: 0.75rem;
-  }
-  .skill-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .service-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .tag {
     font-size: 0.65rem;
     letter-spacing: 0.1em;
-    padding: 0.25rem 0.75rem;
+    padding: 0.3rem 0.85rem;
     border: 1px solid var(--border);
     color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--mono);
+    border-radius: 2px;
   }
 
-  /* ── WORK ── */
-  #work { background: var(--bg2); }
-  .work-grid { display: flex; flex-direction: column; gap: 6rem; }
+  #work { background: var(--bg); }
+  .work-intro { max-width: 600px; margin-bottom: 5rem; color: var(--muted); }
+  .work-grid { display: flex; flex-direction: column; gap: 7rem; }
   .work-item {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
@@ -393,105 +547,204 @@
   .work-item.visible { opacity: 1; transform: none; }
   .work-item:nth-child(even) { direction: rtl; }
   .work-item:nth-child(even) > * { direction: ltr; }
-  .work-screens {
-    position: relative;
-    height: 420px;
-  }
+  .work-screens { position: relative; height: 460px; }
   .phone-frame {
     position: absolute;
-    width: 180px;
+    width: 200px;
     background: var(--bg3);
     border: 1px solid var(--border);
-    border-radius: 24px;
+    border-radius: 28px;
     overflow: hidden;
     aspect-ratio: 9/19;
+    transition: transform 0.5s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   }
-  .phone-frame .screen {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.65rem;
-    color: var(--muted);
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: center;
-    padding: 1rem;
+  .phone-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .phone1 {
+    top: 10px;
+    left: 30px;
+    z-index: 2;
+    transform: rotate(-3deg);
   }
-  .phone-screen-icon { font-size: 2rem; }
-  .phone1 { top: 20px; left: 20px; z-index: 2; }
-  .phone2 { top: 60px; left: 130px; z-index: 1; opacity: 0.6; filter: blur(1px); }
+  .phone2 {
+    top: 70px;
+    left: 170px;
+    z-index: 1;
+    opacity: 0.85;
+    transform: rotate(3deg);
+  }
+  .work-item:hover .phone1 { transform: rotate(-1deg) translateY(-8px); }
+  .work-item:hover .phone2 { transform: rotate(1deg) translateY(-8px); }
+
   .work-body .app-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .work-body .app-label::before {
+    content: '';
+    width: 18px;
+    height: 1px;
+    background: var(--accent);
   }
   .work-body h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.2rem;
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
     font-weight: 400;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.2;
   }
-  .work-body p { color: var(--muted); margin-bottom: 2rem; }
-  .work-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
-  .work-meta-item { font-size: 0.75rem; color: var(--muted); }
-  .work-meta-item strong { display: block; color: var(--text); font-size: 0.85rem; font-weight: 400; margin-bottom: 0.2rem; }
+  .work-body > p { color: var(--muted); margin-bottom: 1.5rem; line-height: 1.85; }
+
   .feature-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 2rem;
-  border-top: 1px solid var(--border2);
-}
-.feature-list li {
-  padding: 0.85rem 0;
-  border-bottom: 1px solid var(--border2);
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.feature-list li strong {
-  display: block;
-  color: var(--text);
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.25rem;
-}
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 2rem;
+    border-top: 1px solid var(--border2);
+  }
+  .feature-list li {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border2);
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.65;
+    transition: padding-left 0.3s;
+  }
+  .feature-list li:hover { padding-left: 0.5rem; }
+  .feature-list li strong {
+    display: block;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.3rem;
+  }
+  .work-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+  }
+  .work-meta-item { font-size: 0.8rem; color: var(--muted); }
+  .work-meta-item strong {
+    display: block;
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
   .appstore-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.8rem 1.6rem;
     border: 1px solid var(--border);
     color: var(--text);
     text-decoration: none;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     border-radius: 6px;
-    transition: border-color 0.3s, background 0.3s;
+    transition: border-color 0.3s, background 0.3s, transform 0.2s;
+    letter-spacing: 0.05em;
   }
-  .appstore-btn:hover { border-color: var(--accent); background: rgba(200,169,110,0.05); }
-  .appstore-logo { font-size: 1.4rem; }
+  .appstore-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    transform: translateY(-2px);
+  }
+  .appstore-logo { font-size: 1.1rem; line-height: 1; }
 
-  /* ── PROCESS ── */
+  #why-japan { background: var(--bg2); position: relative; overflow: hidden; }
+  .why-japan-bg {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,169,110,0.05) 0%, transparent 70%);
+    top: 20%;
+    left: -10%;
+    pointer-events: none;
+  }
+  .why-japan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: start;
+    position: relative;
+  }
+  .why-japan-symbol {
+    font-family: var(--serif);
+    font-size: clamp(8rem, 18vw, 16rem);
+    line-height: 0.9;
+    color: var(--accent);
+    font-weight: 400;
+    text-align: center;
+    opacity: 0.95;
+  }
+  .why-japan-symbol-sub {
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 1rem;
+  }
+  .why-japan-points {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .why-point {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border2);
+  }
+  .why-point:last-child { border-bottom: none; }
+  .why-point-num {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    color: var(--accent);
+    font-style: italic;
+  }
+  .why-point h4 {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .why-point p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
   #process { background: var(--bg); }
   .process-steps { display: flex; flex-direction: column; }
   .process-step {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 100px 1fr;
     gap: 2rem;
     padding: 3rem 0;
     border-bottom: 1px solid var(--border2);
     position: relative;
     opacity: 0;
     transform: translateX(-20px);
-    transition: opacity 0.6s, transform 0.6s;
+    transition: opacity 0.6s, transform 0.6s, background 0.3s;
   }
   .process-step.visible { opacity: 1; transform: none; }
+  .process-step:hover { background: rgba(200,169,110,0.02); }
   .step-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--serif);
     font-size: 3rem;
     color: var(--border);
     line-height: 1;
@@ -499,40 +752,74 @@
     transition: color 0.3s;
   }
   .process-step:hover .step-num { color: var(--accent); }
-  .step-content h4 { font-size: 1.1rem; font-weight: 400; margin-bottom: 0.75rem; }
-  .step-content p { color: var(--muted); font-size: 0.9rem; }
+  .step-content h4 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+  .step-content p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
 
-  /* ── CONTACT ── */
   #contact {
     background: var(--bg2);
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
-  .contact-inner { max-width: 600px; margin: 0 auto; }
+  .contact-bg {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .contact-inner { max-width: 640px; margin: 0 auto; position: relative; }
   .contact-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--serif);
     font-size: clamp(2.5rem, 6vw, 5rem);
     font-weight: 400;
     line-height: 1.1;
     margin-bottom: 1.5rem;
   }
   .contact-title em { font-style: italic; color: var(--accent); }
-  .contact-sub { color: var(--muted); margin-bottom: 3rem; }
+  .contact-sub {
+    color: var(--muted);
+    margin-bottom: 3rem;
+    line-height: 1.9;
+  }
   .contact-email {
     display: inline-block;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
+    font-family: var(--serif);
+    font-size: 1.6rem;
     color: var(--text);
     text-decoration: none;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.4rem;
     margin-bottom: 3rem;
-    transition: border-color 0.3s, color 0.3s;
+    transition: border-color 0.3s, color 0.3s, letter-spacing 0.3s;
   }
-  .contact-email:hover { color: var(--accent); border-color: var(--accent); }
-  .contact-socials { display: flex; justify-content: center; gap: 2rem; }
+  .contact-email:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .contact-socials {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 1rem;
+  }
   .social-link {
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
     text-decoration: none;
@@ -540,27 +827,21 @@
   }
   .social-link:hover { color: var(--accent); }
 
-  /* ── FOOTER ── */
   footer {
-    padding: 2rem 4rem;
+    padding: 2.5rem 4rem;
     border-top: 1px solid var(--border2);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--muted);
+    letter-spacing: 0.05em;
+    background: var(--bg);
   }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes scrollLine {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
-  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes scrollLine { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-  /* ── CUSTOM CURSOR ── */
   .cursor {
     position: fixed;
     width: 8px;
@@ -571,6 +852,7 @@
     z-index: 9999;
     transform: translate(-50%, -50%);
     transition: width 0.2s, height 0.2s, opacity 0.2s;
+    mix-blend-mode: difference;
   }
   .cursor-ring {
     position: fixed;
@@ -586,25 +868,37 @@
   body:has(a:hover) .cursor { width: 14px; height: 14px; }
   body:has(a:hover) .cursor-ring { width: 44px; height: 44px; border-color: var(--accent); }
 
-  /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
     nav { padding: 1.25rem 2rem; }
+    nav.scrolled { padding: 1rem 2rem; }
     .nav-links { display: none; }
     .hamburger { display: flex; }
     section { padding: 5rem 2rem; }
     #hero { padding: 0 2rem 5rem; }
-    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .about-tag { right: 0; }
-    .skills-grid { grid-template-columns: 1fr; }
+    .hero-scroll-hint { right: 2rem; }
+    #philosophy { padding: 6rem 2rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 4rem; }
+    .about-tag { right: 0; bottom: -1rem; }
+    .principles-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
     .work-item { grid-template-columns: 1fr; gap: 3rem; }
     .work-item:nth-child(even) { direction: ltr; }
-    .work-screens { height: 300px; }
-    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .work-screens { height: 380px; }
+    .phone-frame { width: 170px; }
+    .phone1 { left: 10px; }
+    .phone2 { left: 130px; }
+    .why-japan-grid { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
     .cursor, .cursor-ring { display: none; }
   }
   @media (max-width: 600px) {
-    .about-stats { grid-template-columns: 1fr 1fr; }
-    .contact-socials { flex-wrap: wrap; }
+    .about-stats { grid-template-columns: 1fr; gap: 1.5rem; }
+    .contact-socials { flex-wrap: wrap; gap: 1.5rem; }
+    .work-meta { gap: 1.5rem; }
+    .work-screens { height: 340px; }
+    .phone-frame { width: 145px; }
+    .phone1 { left: 5px; }
+    .phone2 { left: 110px; }
   }
 </style>
 </head>
@@ -613,14 +907,13 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- NAV -->
 <nav id="navbar">
-  <a href="#hero" class="nav-logo">ToggleStudio.</a>
+  <a href="#hero" class="nav-logo">ToggleStudio</a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
-    <li><a href="#skills">Skills</a></li>
+    <li><a href="#principles">Principles</a></li>
+    <li><a href="#services">Services</a></li>
     <li><a href="#work">Work</a></li>
-    <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -630,18 +923,21 @@
 
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about" class="mobile-nav-link">About</a>
-  <a href="#skills" class="mobile-nav-link">Skills</a>
+  <a href="#principles" class="mobile-nav-link">Principles</a>
+  <a href="#services" class="mobile-nav-link">Services</a>
   <a href="#work" class="mobile-nav-link">Work</a>
-  <a href="#process" class="mobile-nav-link">Process</a>
   <a href="#contact" class="mobile-nav-link">Contact</a>
 </div>
 
-<!-- HERO -->
 <section id="hero">
+  <div class="hero-bg-grid"></div>
   <div class="hero-bg-circle"></div>
-  <div class="hero-kicker">iOS App Developer · Freelance</div>
-  <h1 class="hero-title">使いやすさは”デザイン”から。<br><em>安心は”日本”から。</em></h1>
-  <p class="hero-sub">目指すのは「綺麗で整ったデザイン」ではなく、「そのサービスの人柄が正しく伝わるデザイン」</p>
+  <div class="hero-kicker">iOS App Developer · Web Designer · Japan</div>
+  <h1 class="hero-title-jp">
+    使いやすさは<span class="accent">"デザイン"</span>から。<br>
+    安心は<span class="accent">"日本"</span>から。
+  </h1>
+  <p class="hero-sub">綺麗で整ったデザインではなく、<br>そのサービスの人柄が正しく伝わるデザインを。<br>認知心理学に基づいた、意味のあるものづくりを。</p>
   <div class="hero-cta">
     <a href="#work" class="btn-primary">実績を見る</a>
     <a href="#contact" class="btn-ghost">相談する</a>
@@ -649,13 +945,23 @@
   <div class="hero-scroll-hint">Scroll</div>
 </section>
 
-<!-- ABOUT -->
+<section id="philosophy">
+  <div class="philosophy-quote reveal">
+    <div class="philosophy-mark">"</div>
+    <p class="philosophy-text">
+      デザインは、その人の<span class="accent">顔</span>であり、<span class="accent">人柄</span>。<br>
+      そして、一度きりの<span class="accent">第一印象</span>を決めるもの。
+    </p>
+    <div class="philosophy-author">— ToggleStudio's Belief</div>
+  </div>
+</section>
+
 <section id="about">
   <div class="container">
     <div class="about-grid">
       <div class="about-left reveal">
         <div class="about-photo-wrap">
-          <!-- プロフィール写真をここに配置 <img src="photo.jpg" style="width:100%;height:100%;object-fit:cover;"> -->
+          <!-- <img src="images/profile.jpg" alt="ToggleStudio Developer" style="width:100%;height:100%;object-fit:cover;"> -->
           <div class="about-photo-placeholder">
             <div class="photo-icon">👤</div>
             <p>プロフィール写真<br>を配置</p>
@@ -665,203 +971,270 @@
       </div>
       <div class="about-body reveal">
         <div class="section-label">About</div>
-        <h2 class="section-title">デザインは<br>そのサービスの顔であり<br>人柄であり、身なりである。</h2>
+        <h2 class="section-title">デザインは、<br>サービスの<em>身なり</em>である。</h2>
         <div class="divider"></div>
-        <p>日本国内でiOSアプリ開発とWEB制作を手がけています。デザインは、サービスの「身なり」。身なりを整えることが社会で生きる上での礼儀であるように、デザインを整えることもまた、サービスを世に出す上での前提条件です。だから私は、見た目の美しさだけでなく、一つひとつの判断に意味を持たせることを徹底しています。</p>
-        <p>認知心理学の知見を取り入れ、ユーザーの視認性とストレスに配慮した「意味のあるデザイン」を追求しています。Widgetで日常に溶け込むiOSアプリ、想いが伝わるWEBサイト。</p>
+        <p>日本国内で、iOSアプリ開発とWEB制作を手がけています。デザインは、サービスの「身なり」であり、一度きりの<strong>第一印象</strong>を決める要素。身なりを整えることが社会で生きる上での礼儀であるように、デザインを整えることもまた、サービスを世に出す上での前提条件です。</p>
+        <p>だから私は、見た目の美しさだけでなく、<strong>一つひとつの判断に意味を持たせる</strong>ことを徹底しています。認知心理学の知見を取り入れ、ユーザーの視認性とストレスに配慮した設計を追求。Widgetで日常に溶け込むiOSアプリ、想いが正しく伝わるWEBサイトを、日本からお届けします。</p>
         <div class="about-stats">
-  <div>
-    <div class="stat-num" data-count="12">0</div>
-    <div class="stat-label">開発アプリ数</div>
-  </div>
-  <div>
-    <div class="stat-num" data-count="5">0</div>
-    <div class="stat-label">開発年数</div>
-  </div>
-  <div>
-    <div class="stat-num" data-count="100" data-suffix="%">0</div>
-    <div class="stat-label">国産・自社開発</div>
-  </div>
-</div>
+          <div>
+            <div class="stat-num" data-count="12">0</div>
+            <div class="stat-label">App Released</div>
+          </div>
+          <div>
+            <div class="stat-num" data-count="5">0</div>
+            <div class="stat-label">Years</div>
+          </div>
+          <div>
+            <div class="stat-num" data-count="100" data-suffix="%">0</div>
+            <div class="stat-label">Made in Japan</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SKILLS -->
-<section id="skills">
+<section id="principles">
   <div class="container">
-    <div class="section-label">Skills & Stack</div>
-    <h2 class="section-title">使う技術</h2>
+    <div class="section-label">Design Principles</div>
+    <h2 class="section-title">私が大切にする<br><em>3つの原則</em>。</h2>
     <div class="divider"></div>
-    <p class="skills-intro">Apple プラットフォームのベストプラクティスを軸に、フロントからバックエンド連携・ストア申請まで完結します。</p>
-    <div class="skills-grid">
-      <div class="skill-card reveal">
-        <div class="skill-icon">01 /</div>
-        <div class="skill-name">UI / UX 設計</div>
-        <p class="skill-desc">Human Interface Guidelines に準拠した直感的な UI を Figma で設計。ユーザーが迷わない導線を最優先します。</p>
-        <div class="skill-tags"><span class="tag">SwiftUI</span><span class="tag">UIKit</span><span class="tag">Figma</span></div>
+    <p class="principles-intro">「ただ良いもの」ではなく、ユーザーの心と暮らしに静かに寄り添う設計を。<br>すべての判断には、根拠と意味があります。</p>
+    <div class="principles-grid">
+      <div class="principle-card reveal">
+        <div class="principle-num">01 / Identity</div>
+        <h3 class="principle-name">デザインは<br><span class="accent">"身なり"</span>である</h3>
+        <p class="principle-desc">サービスの顔であり、人柄を映す存在。整っていない身なりが信用されないように、デザインの整わないプロダクトは選ばれません。だから整えることは、装飾ではなく礼儀です。</p>
       </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">02 /</div>
-        <div class="skill-name">ネイティブ開発</div>
-        <p class="skill-desc">Swift を中心に、モダンな Concurrency・Combine・SwiftData を活用。パフォーマンスと保守性を両立します。</p>
-        <div class="skill-tags"><span class="tag">Swift</span><span class="tag">Xcode</span><span class="tag">SwiftData</span></div>
+      <div class="principle-card reveal">
+        <div class="principle-num">02 / Intent</div>
+        <h3 class="principle-name">すべてに<br><span class="accent">意味</span>を持たせる</h3>
+        <p class="principle-desc">色一つ、配置一つに理由を。「なんとなく良い」では足りません。なぜそこにあるのか、なぜその色なのか——一つひとつの判断に複数の根拠を重ね、必然性のあるデザインを生み出します。</p>
       </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">03 /</div>
-        <div class="skill-name">バックエンド連携</div>
-        <p class="skill-desc">Firebase・Supabase を活用したサーバーレス構成を得意とします。REST API・GraphQL との連携も対応。</p>
-        <div class="skill-tags"><span class="tag">Firebase</span><span class="tag">Supabase</span><span class="tag">REST</span></div>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">04 /</div>
-        <div class="skill-name">収益化 / 課金</div>
-        <p class="skill-desc">StoreKit 2 によるサブスクリプション・買い切り実装。RevenueCat を使った分析・A/B テストも対応。</p>
-        <div class="skill-tags"><span class="tag">StoreKit 2</span><span class="tag">RevenueCat</span></div>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">05 /</div>
-        <div class="skill-name">通知 / Widget</div>
-        <p class="skill-desc">Push 通知・ライブアクティビティ・ホーム画面ウィジェット (WidgetKit) の実装で、アプリの継続利用率を高めます。</p>
-        <div class="skill-tags"><span class="tag">WidgetKit</span><span class="tag">APNs</span></div>
-      </div>
-      <div class="skill-card reveal">
-        <div class="skill-icon">06 /</div>
-        <div class="skill-name">審査 / リリース</div>
-        <p class="skill-desc">App Store Connect の設定からメタデータ・スクリーンショット最適化、審査対応まで一貫してサポート。</p>
-        <div class="skill-tags"><span class="tag">App Store Connect</span><span class="tag">ASO</span></div>
+      <div class="principle-card reveal">
+        <div class="principle-num">03 / Empathy</div>
+        <h3 class="principle-name">ユーザーの<br><span class="accent">"認知"</span>に寄り添う</h3>
+        <p class="principle-desc">認知心理学に基づき、視認性とストレスに配慮した設計を。「迷わない・疲れない」UIは、操作のためでなくユーザーを助けるためのもの。ダークパターンに頼らない、誠実なものづくりです。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- WORK -->
+<section id="services">
+  <div class="container">
+    <div class="section-label">Services & Stack</div>
+    <h2 class="section-title">提供できる<em>こと</em>。</h2>
+    <div class="divider"></div>
+    <p class="services-intro">iOSアプリの企画・設計・開発・申請まで、そしてWEBサイトの制作まで。<br>個人開発だからこその一貫性と速度で、想いを形にします。</p>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">01 / iOS App</div>
+        <div class="service-name">iOSアプリ開発</div>
+        <p class="service-desc">SwiftUIを中心に、Widget・通知・課金まで対応。Human Interface Guidelinesと認知心理学を融合させた、迷わず使える設計。App Store審査・リリースまで一貫サポート。</p>
+        <div class="service-tags">
+          <span class="tag">Swift</span>
+          <span class="tag">SwiftUI</span>
+          <span class="tag">WidgetKit</span>
+          <span class="tag">SwiftData</span>
+          <span class="tag">MapKit</span>
+          <span class="tag">StoreKit 2</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">02 / Web Design</div>
+        <div class="service-name">WEB制作</div>
+        <p class="service-desc">想いが正しく伝わるWEBサイトを。コーポレートサイト、ポートフォリオ、LPまで。視覚的階層・タイポグラフィ・余白の設計を意識し、ユーザーが自然に読み進める導線を構築します。</p>
+        <div class="service-tags">
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Responsive</span>
+          <span class="tag">SEO</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">03 / UI / UX</div>
+        <div class="service-name">UI / UX 設計</div>
+        <p class="service-desc">ユーザーの視認性とストレスに配慮したインターフェース設計。認知負荷を最小化する情報設計、「迷わない・疲れない」導線を、Figmaを使ったプロトタイプで具体化します。</p>
+        <div class="service-tags">
+          <span class="tag">Figma</span>
+          <span class="tag">Prototype</span>
+          <span class="tag">UX Research</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">04 / Backend</div>
+        <div class="service-name">バックエンド連携</div>
+        <p class="service-desc">Firebase・Supabaseを中心としたサーバーレス構成が得意。データ同期、認証、プッシュ通知、ランキング機能などを、軽量で安全な構成で実装します。</p>
+        <div class="service-tags">
+          <span class="tag">Firebase</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">REST API</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="work">
   <div class="container">
     <div class="section-label">Selected Work</div>
-    <h2 class="section-title">制作実績</h2>
+    <h2 class="section-title">これまでの<em>制作実績</em>。</h2>
     <div class="divider"></div>
+    <p class="work-intro">理念を形にしてきた、リリース済みのアプリたち。<br>それぞれが「ユーザーに寄り添う」をどう設計したか、ご覧ください。</p>
     <div class="work-grid">
-<!-- App 1 -->
-<div class="work-item reveal">
-  <div class="work-screens">
-    <div class="phone-frame phone1">
-      <img src="images/Group%20208.png" alt="関西万博マップアプリ メイン画面" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-    <div class="phone-frame phone2">
-      <img src="images/IMG_3298.PNG" alt="関西万博マップアプリ サブ画面" style="width:100%;height:100%;object-fit:cover;">
+
+      <div class="work-item">
+        <div class="work-screens">
+          <div class="phone-frame phone1">
+            <img src="images/Group%20208.png" alt="関西万博マップアプリ メイン画面">
+          </div>
+          <div class="phone-frame phone2">
+            <img src="images/IMG_3298.PNG" alt="関西万博マップアプリ サブ画面">
+          </div>
+        </div>
+        <div class="work-body">
+          <div class="app-label">Expo Map · Travel</div>
+          <h3>関西万博2025 非公式マップアプリ</h3>
+          <p>「公式じゃない、でも一番使える」——この理念のもと開発した、大阪・関西万博のための非公式マップアプリ。公式マップの「動作が重い」「電波が弱い会場では使えない」という課題に着目し、MapKitを活用した軽快な動作と、完全オフライン対応を実現。会場内のすべての写真は、開発者自身が現地に足を運んで撮影したものです。</p>
+          <ul class="feature-list">
+            <li><strong>完全オフライン対応</strong>機内モードでもストレスなく利用可能</li>
+            <li><strong>2種類の保存機能</strong>「いいね」と「ブックマーク」を使い分け、自分だけの万博体験を記録</li>
+            <li><strong>パビリオン検索・現在地表示</strong>広大な会場でも迷わない</li>
+            <li><strong>Widget機能</strong>毎日変わるナショナルデーをホーム画面で確認</li>
+            <li><strong>国旗クイズ(ミニゲーム)</strong>待ち時間も楽しめる学びの要素</li>
+          </ul>
+          <p>「行きたい場所」「行った場所」「スタンプを押した場所」——ユーザーそれぞれの使い方に寄り添う設計で、紙のマップを片手に迷う時代に終止符を打ちました。</p>
+          <div class="work-meta">
+            <div class="work-meta-item"><strong>Category</strong>旅行・ナビゲーション</div>
+            <div class="work-meta-item"><strong>Period</strong>1ヶ月</div>
+            <div class="work-meta-item"><strong>Stack</strong>SwiftUI · MapKit · WidgetKit</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-item">
+        <div class="work-screens">
+          <div class="phone-frame phone1">
+            <img src="images/Group%20150.png" alt="ギンガゲーム メイン画面">
+          </div>
+          <div class="phone-frame phone2">
+            <img src="images/Group%20147.png" alt="ギンガゲーム ゲームプレイ画面">
+          </div>
+        </div>
+        <div class="work-body">
+          <div class="app-label">Casual Puzzle · Game</div>
+          <h3>ギンガゲーム</h3>
+          <p>「銀河を合体させよう」をコンセプトに開発した、宇宙をテーマにしたカジュアルパズルゲーム。水星から始まり、惑星や恒星を合体させながら、最終的には「銀河」へと到達する進化型パズル。シンプルな操作性の中に、宇宙の神秘を感じられる世界観を込めました。</p>
+          <ul class="feature-list">
+            <li><strong>11種類の天体が登場</strong>水星から銀河まで、合体させて宇宙の進化を体感</li>
+            <li><strong>宇宙をイメージした美しいデザイン</strong>神秘的なビジュアルで没入感を演出</li>
+            <li><strong>シンプルでハマる操作性</strong>年齢を問わず誰でも楽しめる設計</li>
+            <li><strong>広告視聴で進化サポート</strong>水星・火星・金星を削除できる任意機能を搭載</li>
+            <li><strong>マルチデバイス対応</strong>iPhone・iPadで最適なピースサイズに自動調整</li>
+          </ul>
+          <p>銀河と銀河の合体時には特別な演出を実装し、クリア後もゲームを続行できる仕様に。今後のアップデートでは、巨大ブラックホール誕生の限定イマーシブ動画も予定しています。</p>
+          <div class="work-meta">
+            <div class="work-meta-item"><strong>Category</strong>ゲーム・パズル</div>
+            <div class="work-meta-item"><strong>Period</strong>2ヶ月</div>
+            <div class="work-meta-item"><strong>Stack</strong>SwiftUI · SpriteKit · AdMob</div>
+          </div>
+          <a href="https://apps.apple.com/jp/app/%E3%82%AE%E3%83%B3%E3%82%AC%E3%82%B2%E3%83%BC%E3%83%A0/id6751226633" class="appstore-btn" target="_blank" rel="noopener">
+            <span class="appstore-logo"></span>
+            App Store で見る
+          </a>
+        </div>
+      </div>
+
+      <div class="work-item">
+        <div class="work-screens">
+          <div class="phone-frame phone1">
+            <img src="images/Group%20202.jpg" alt="CleanWars.io メイン画面">
+          </div>
+          <div class="phone-frame phone2">
+            <img src="images/Group%20204.jpg" alt="CleanWars.io ランキング画面">
+          </div>
+        </div>
+        <div class="work-body">
+          <div class="app-label">Lifestyle · Game</div>
+          <h3>CleanWars.io</h3>
+          <p>「不必要なもので世界と競え」をコンセプトに開発した、写真整理 × オンライン対戦アプリ。スワイプ操作だけで写真フォルダを整理でき、削除した容量(GB)が世界中のユーザーと競うスコアになります。「片付け」という地味な作業を、ゲーム性と達成感で楽しい体験に変えるのが狙いです。</p>
+          <ul class="feature-list">
+            <li><strong>スワイプで直感的に整理</strong>左にスワイプで削除候補へ、右で保持。判断に迷わないシンプルなUI</li>
+            <li><strong>純正写真アプリと連携</strong>アルバムからランダム30枚を表示し、集中して1枚ずつ判断できる</li>
+            <li><strong>削除容量の可視化</strong>これまで削除した合計GB数をホーム画面に表示し、達成感を演出</li>
+            <li><strong>世界中のユーザーとスコア競争</strong>削除容量がそのままランキングのスコアに</li>
+            <li><strong>まとめて削除方式</strong>選択した写真は最後に一括削除。誤操作の不安なく整理できる</li>
+          </ul>
+          <p>写真フォルダを眺めていても消す決断ができない——そんな心理的ハードルを、認知心理学の視点で解決した一作。「一覧で見ると消せない写真も、一枚に集中すると判断できる」というユーザー心理を活用しました。</p>
+          <div class="work-meta">
+            <div class="work-meta-item"><strong>Category</strong>ライフスタイル・ユーティリティ</div>
+            <div class="work-meta-item"><strong>Period</strong>2ヶ月</div>
+            <div class="work-meta-item"><strong>Stack</strong>SwiftUI · PhotoKit · Firebase</div>
+          </div>
+          <a href="https://apps.apple.com/jp/app/cleanwars-io/id6761100596" class="appstore-btn" target="_blank" rel="noopener">
+            <span class="appstore-logo"></span>
+            App Store で見る
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
-  <div class="work-body">
-    <div class="app-label">Expo Map App</div>
-    <h3>関西万博2025 非公式マップアプリ</h3>
-    <p>「公式じゃない、でも一番使える」——この理念のもと開発した、大阪・関西万博のための非公式マップアプリです。公式マップの「動作が重い」「電波が弱い会場では使えない」という課題に着目し、MapKitを活用した軽快な動作と、完全オフライン対応を実現。会場内のすべての写真は、開発者自身が現地に足を運んで撮影したものです。</p>
+</section>
 
-    <ul class="feature-list">
-      <li><strong>完全オフライン対応</strong>機内モードでもストレスなく利用可能</li>
-      <li><strong>2種類の保存機能</strong>「いいね」と「ブックマーク」を使い分け、自分だけの万博体験を記録</li>
-      <li><strong>パビリオン検索・現在地表示</strong>広大な会場でも迷わない</li>
-      <li><strong>Widget機能</strong>毎日変わるナショナルデーをホーム画面で確認</li>
-      <li><strong>国旗クイズ(ミニゲーム)</strong>待ち時間も楽しめる学びの要素</li>
-    </ul>
-
-    <p>「行きたい場所」と「行った場所」、「スタンプを押した場所」——ユーザーそれぞれの使い方に寄り添う設計で、紙のマップを片手に迷う時代に終止符を打ちました。</p>
-
-    <div class="work-meta">
-      <div class="work-meta-item"><strong>カテゴリ</strong>旅行・ナビゲーション</div>
-      <div class="work-meta-item"><strong>期間</strong>1ヶ月</div>
-      <div class="work-meta-item"><strong>技術</strong>SwiftUI · MapKit · WidgetKit</div>
+<section id="why-japan">
+  <div class="why-japan-bg"></div>
+  <div class="container">
+    <div class="why-japan-grid">
+      <div class="reveal">
+        <div class="why-japan-symbol">和</div>
+        <div class="why-japan-symbol-sub">Made in Japan</div>
+      </div>
+      <div class="reveal">
+        <div class="section-label">Why Japan</div>
+        <h2 class="section-title">なぜ、<br><em>日本産</em>なのか。</h2>
+        <div class="divider"></div>
+        <p style="color: var(--muted); margin-bottom: 2rem; line-height: 1.9;">海外製アプリにありがちな過剰なデータ収集や、ストレスの限度を超えた広告。それらを目にするたびに、「ユーザーに寄り添うとは何か」を考えてきました。日本国内で開発・運営することは、私にとってその答えのひとつです。</p>
+        <div class="why-japan-points">
+          <div class="why-point">
+            <div class="why-point-num">01</div>
+            <div>
+              <h4>誠実なデータ取り扱い</h4>
+              <p>必要なデータのみを、必要な分だけ。海外サーバーへの不必要な送信は行わず、ユーザーのプライバシーを最優先に設計しています。</p>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="why-point-num">02</div>
+            <div>
+              <h4>ストレスに配慮した広告量</h4>
+              <p>収益化と体験のバランスを丁寧に設計。広告は最小限に抑え、ユーザーの集中とリラックスを邪魔しない範囲に留めます。</p>
+            </div>
+          </div>
+          <div class="why-point">
+            <div class="why-point-num">03</div>
+            <div>
+              <h4>日本語での迅速なサポート</h4>
+              <p>不具合・要望・お問い合わせには、日本語で迅速に対応。海外製アプリでありがちな、サポート不在の不安はありません。</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-     <!-- App 2 -->
-<div class="work-item reveal">
-  <div class="work-screens">
-    <div class="phone-frame phone1">
-      <img src="images/Group%20150.png" alt="ギンガゲーム メイン画面" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-    <div class="phone-frame phone2">
-      <img src="images/Group%20147.png" alt="ギンガゲーム ゲームプレイ画面" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-  </div>
-  <div class="work-body">
-    <div class="app-label">Casual Puzzle Game</div>
-    <h3>ギンガゲーム</h3>
-    <p>「銀河を合体させよう」をコンセプトに開発した、宇宙をテーマにしたカジュアルパズルゲーム。水星から始まり、惑星や恒星を合体させながら、最終的には「銀河」へと到達する進化型パズルです。シンプルな操作性の中に、宇宙の神秘を感じられる世界観を込めました。誰でも直感的に楽しめながら、深い達成感を味わえる一作です。</p>
-
-    <ul class="feature-list">
-      <li><strong>11種類の天体が登場</strong>水星から銀河まで、合体させて宇宙の進化を体感</li>
-      <li><strong>宇宙をイメージした美しいデザイン</strong>神秘的なビジュアルで没入感を演出</li>
-      <li><strong>シンプルでハマる操作性</strong>年齢を問わず誰でも楽しめる設計</li>
-      <li><strong>広告視聴で進化サポート</strong>水星・火星・金星を削除できる任意機能を搭載</li>
-      <li><strong>マルチデバイス対応</strong>iPhone・iPadで最適なピースサイズに自動調整</li>
-    </ul>
-
-    <p>銀河と銀河の合体時には特別な演出を実装し、クリア後もゲームを続行できる仕様に。今後のアップデートでは、巨大ブラックホール誕生の限定イマーシブ動画も予定しています。宇宙最大の神秘を、あなたの手で目撃してください。</p>
-
-    <div class="work-meta">
-      <div class="work-meta-item"><strong>カテゴリ</strong>ゲーム・パズル</div>
-      <div class="work-meta-item"><strong>期間</strong>2ヶ月</div>
-      <div class="work-meta-item"><strong>技術</strong>SwiftUI · SpriteKit · AdMob</div>
-    </div>
-    <a href="https://apps.apple.com/jp/app/%E3%82%AE%E3%83%B3%E3%82%AC%E3%82%B2%E3%83%BC%E3%83%A0/id6751226633" class="appstore-btn">
-      <span class="appstore-logo"></span>
-      App Store で見る
-    </a>
-  </div>
-</div>
-
-<!-- App 3 -->
-<div class="work-item reveal">
-  <div class="work-screens">
-    <div class="phone-frame phone1">
-      <img src="images/Group%20202.jpg" alt="CleanWars.io メイン画面" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-    <div class="phone-frame phone2">
-      <img src="images/Group%20204.jpg" alt="CleanWars.io ランキング画面" style="width:100%;height:100%;object-fit:cover;">
-    </div>
-  </div>
-  <div class="work-body">
-    <div class="app-label">Lifestyle / Game</div>
-    <h3>CleanWars.io</h3>
-    <p>「不必要なもので世界と競え」をコンセプトに開発した、写真整理 × オンライン対戦アプリ。スワイプ操作だけで写真フォルダを整理でき、削除した容量(GB)が世界中のユーザーと競うスコアになります。「片付け」という地味な作業を、ゲーム性と達成感で楽しい体験に変えるのが狙いです。</p>
-
-    <ul class="feature-list">
-      <li><strong>スワイプで直感的に整理</strong>左にスワイプで削除候補へ、右で保持。判断に迷わないシンプルなUI</li>
-      <li><strong>純正写真アプリと連携</strong>アルバムからランダム30枚を表示し、集中して1枚ずつ判断できる</li>
-      <li><strong>削除容量の可視化</strong>これまで削除した合計GB数をホーム画面に表示し、達成感を演出</li>
-      <li><strong>世界中のユーザーとスコア競争</strong>削除容量がそのままランキングのスコアに</li>
-      <li><strong>まとめて削除方式</strong>選択した写真は最後に一括削除。誤操作の不安なく整理できる</li>
-    </ul>
-
-    <p>写真フォルダを眺めていても消す決断ができない——そんな心理的ハードルを、認知心理学の視点で解決した一作です。「一覧で見ると消せない写真も、一枚に集中すると判断できる」というユーザー心理を活用し、整理に対する集中力と達成感を両立させました。</p>
-
-    <div class="work-meta">
-      <div class="work-meta-item"><strong>カテゴリ</strong>ライフスタイル・ユーティリティ</div>
-      <div class="work-meta-item"><strong>期間</strong>2ヶ月</div>
-      <div class="work-meta-item"><strong>技術</strong>SwiftUI · PhotoKit · Firebase</div>
-    </div>
-    <a href="https://apps.apple.com/jp/app/cleanwars-io/id6761100596" class="appstore-btn">
-      <span class="appstore-logo"></span>
-      App Store で見る
-    </a>
-  </div>
-</div>
-
-<!-- PROCESS -->
 <section id="process">
   <div class="container">
     <div class="section-label">How I Work</div>
-    <h2 class="section-title">進め方</h2>
+    <h2 class="section-title">プロジェクトの<em>進め方</em>。</h2>
     <div class="divider"></div>
     <div class="process-steps">
       <div class="process-step reveal">
         <div class="step-num">01</div>
         <div class="step-content">
           <h4>無料相談・ヒアリング</h4>
-          <p>アイデアの段階でも OK です。作りたいもの・ターゲットユーザー・ご予算の目線合わせを行います。オンライン（30〜60分）で気軽にどうぞ。</p>
+          <p>アイデア段階でも構いません。作りたいもの・ターゲットユーザー・ご予算の目線合わせを行います。オンライン(30〜60分)で、気軽にどうぞ。</p>
         </div>
       </div>
       <div class="process-step reveal">
@@ -874,60 +1247,58 @@
       <div class="process-step reveal">
         <div class="step-num">03</div>
         <div class="step-content">
-          <h4>UI デザイン・プロトタイプ</h4>
-          <p>Figma でワイヤーフレーム → 高精度デザインを作成。実機に近いプロトタイプでイメージを確認してから開発着手します。</p>
+          <h4>UIデザイン・プロトタイプ</h4>
+          <p>Figmaでワイヤーフレーム → 高精度デザインを作成。実機に近いプロトタイプでイメージを確認してから、開発に着手します。</p>
         </div>
       </div>
       <div class="process-step reveal">
         <div class="step-num">04</div>
         <div class="step-content">
           <h4>開発・中間確認</h4>
-          <p>2週間スプリントで進捗共有します。TestFlight を使い、実機で動作確認しながらフィードバックを反映。認識のズレを早期解消します。</p>
+          <p>2週間スプリントで進捗を共有。TestFlightを使い、実機で動作確認しながらフィードバックを反映。認識のズレを早期に解消します。</p>
         </div>
       </div>
       <div class="process-step reveal">
         <div class="step-num">05</div>
         <div class="step-content">
           <h4>審査申請・リリース</h4>
-          <p>App Store Connect の設定・スクリーンショット・説明文の最適化まで対応。審査リジェクト時の対応・再申請もサポートします。</p>
+          <p>App Store Connectの設定、スクリーンショット、説明文の最適化まで対応。審査リジェクト時の対応・再申請もサポートします。</p>
         </div>
       </div>
       <div class="process-step reveal">
         <div class="step-num">06</div>
         <div class="step-content">
           <h4>リリース後サポート</h4>
-          <p>リリース後 1ヶ月は不具合対応を無償で実施。継続的なアップデートや機能追加は月額保守プランでご提供しています。</p>
+          <p>リリース後1ヶ月は不具合対応を無償で実施。継続的なアップデートや機能追加は、月額保守プランでご提供しています。</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
+  <div class="contact-bg"></div>
   <div class="container">
     <div class="contact-inner">
-      <div class="section-label">Contact</div>
+      <div class="section-label" style="justify-content: center;">Contact</div>
       <h2 class="contact-title">まず、<em>話しましょう</em>。</h2>
-      <p class="contact-sub">アイデアの段階でも、他社で断られた案件でも、気軽にご相談ください。<br>通常 24 時間以内に返信します。</p>
-      <!-- メールアドレスを変更してください -->
-      <a href="mailto:hello@yukitanaka.dev" class="contact-email">hello@yukitanaka.dev</a>
+      <p class="contact-sub">アイデアの段階でも、他社で断られた案件でも、お気軽にご相談ください。<br>通常24時間以内に返信します。</p>
+      <a href="mailto:contact@togglestudio.dev" class="contact-email">contact@togglestudio.dev</a>
       <div class="contact-socials">
-        <a href="#" class="social-link">GitHub</a>
-        <a href="#" class="social-link">X (Twitter)</a>
+        <a href="https://github.com/ToggleStudio" class="social-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="#" class="social-link" target="_blank" rel="noopener">X (Twitter)</a>
+        <a href="#" class="social-link" target="_blank" rel="noopener">App Store</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <span>© 2025 ToggleStudio. All rights reserved.</span>
-  <span>iOSアプリ開発 · フリーランス · 大阪</span>
+  <span>© 2026 ToggleStudio. All rights reserved.</span>
+  <span>iOSアプリ開発 · WEB制作 · 日本</span>
 </footer>
 
 <script>
-  /* ── CURSOR ── */
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
@@ -940,13 +1311,11 @@
   }
   animateCursor();
 
-  /* ── NAV SCROLL ── */
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 50);
   });
 
-  /* ── HAMBURGER ── */
   const ham = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
   ham.addEventListener('click', () => {
@@ -960,7 +1329,6 @@
     });
   });
 
-  /* ── INTERSECTION OBSERVER (reveal) ── */
   const observer = new IntersectionObserver(entries => {
     entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
@@ -971,7 +1339,6 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal, .work-item, .process-step').forEach(el => observer.observe(el));
 
-  /* ── COUNTER ANIMATION ── */
   const counterObs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -989,7 +1356,6 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
 
-  /* ── HERO PARALLAX ── */
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     const hero = document.getElementById('hero');
@@ -998,7 +1364,6 @@
     }
   });
 
-  /* ── SMOOTH NAV ACTIVE ── */
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', () => {
