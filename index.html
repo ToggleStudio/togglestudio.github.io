@@ -3,30 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="ToggleStudio — 日本国内でiOSアプリ開発とWEB制作を行う個人クリエイター。認知心理学に基づき、ユーザーの視認性とストレスに配慮した「意味のあるデザイン」を追求。">
-<title>ToggleStudio — iOS App Developer & Web Design</title>
+<meta name="description" content="ToggleStudio — 認知心理学をもとに、使う人の頭を疲れさせないスマホアプリを設計するiOS開発者。アプリ開発と、既存Webサイトの改善。">
+<title>ToggleStudio — 迷わない。疲れない。</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=Outfit:wght@400;500;600&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0b;
     --bg2: #111114;
     --bg3: #18181d;
-    --bg4: #1d1d23;
     --text: #f0eee8;
     --text-soft: #c8c6c0;
     --muted: #888880;
-    --muted-dim: #5a5a55;
     --accent: #c8a96e;
     --accent2: #e8d4a8;
     --accent-dim: rgba(200,169,110,0.12);
     --border: rgba(200,169,110,0.18);
     --border2: rgba(240,238,232,0.08);
+    --danger: #c86e6e;
+    --ok: #7fb58a;
     --radius: 2px;
     --serif: 'Cormorant Garamond', 'Noto Serif JP', serif;
+    --serif-jp: 'Noto Serif JP', 'Hiragino Mincho ProN', serif;
     --sans: 'DM Sans', 'Hiragino Sans', sans-serif;
-    --mono: 'JetBrains Mono', monospace;
+    --mono: 'Outfit', 'DM Sans', sans-serif;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -40,6 +41,9 @@
     overflow-x: hidden;
   }
   ::selection { background: var(--accent); color: var(--bg); }
+  .section-title, .hero-title, .contact-title, .work-body h3, .principle-name, .stat-num, .cw-score { font-variant-numeric: lining-nums; font-feature-settings: 'lnum' 1; }
+  .principle-num, .step-num, .demo-label, .demo-basis, .demo-result, .demo-panel-head, .cw-status, .cw-card-name, .cw-card-size, .cw-rank li, .maze-taps, .al-time, .rt-taps, .tag, .case-head, .pick-steps, .stat-num, .demo-reset, .cw-undo, .cw-keys, .cw-hint, .cw-tag { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+  button { font-family: inherit; }
 
   body::before {
     content: '';
@@ -51,849 +55,596 @@
     z-index: 999;
   }
 
+  /* ── NAV ── */
   nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
     padding: 1.5rem 4rem;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid transparent;
     transition: border-color 0.4s, background 0.4s, padding 0.4s;
   }
-  nav.scrolled {
-    background: rgba(10,10,11,0.85);
-    border-color: var(--border2);
-    padding: 1rem 4rem;
-  }
-  .nav-logo {
-    font-family: var(--serif);
-    font-size: 1.4rem;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .nav-logo::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    display: inline-block;
-  }
+  nav.scrolled { background: rgba(10,10,11,0.85); border-color: var(--border2); padding: 1rem 4rem; }
+  .nav-logo { display: inline-flex; align-items: center; text-decoration: none; transition: opacity 0.3s; }
+  .nav-logo img { height: 34px; width: auto; display: block; }
+  .nav-logo:hover { opacity: 0.75; }
+  .wordmark b, .about-brand b { font-weight: 700; }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    transition: color 0.3s;
-    position: relative;
+    color: var(--muted); text-decoration: none; font-size: 0.75rem;
+    letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.3s; position: relative;
   }
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    left: 0; bottom: -6px;
-    width: 0; height: 1px;
-    background: var(--accent);
-    transition: width 0.3s;
-  }
+  .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
   .nav-links a:hover { color: var(--accent); }
   .nav-links a:hover::after { width: 100%; }
-
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 4px;
-    background: none;
-    border: none;
-  }
-  .hamburger span {
-    display: block;
-    width: 24px;
-    height: 1px;
-    background: var(--text);
-    transition: all 0.3s;
-  }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 24px; height: 1px; background: var(--text); transition: all 0.3s; }
   .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
   .hamburger.open span:nth-child(2) { opacity: 0; }
   .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
   .mobile-menu {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(10,10,11,0.97);
-    backdrop-filter: blur(10px);
-    z-index: 99;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
+    display: none; position: fixed; inset: 0; background: rgba(10,10,11,0.97);
+    backdrop-filter: blur(10px); z-index: 99;
+    flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
   }
   .mobile-menu.open { display: flex; }
-  .mobile-menu a {
-    color: var(--text);
-    text-decoration: none;
-    font-family: var(--serif);
-    font-size: 2.5rem;
-    letter-spacing: 0.05em;
-  }
+  .mobile-menu a { color: var(--text); text-decoration: none; font-family: var(--mono); font-weight: 400; font-size: 1.6rem; letter-spacing: 0.2em; text-transform: uppercase; }
 
   section { padding: 8rem 4rem; position: relative; }
   .container { max-width: 1100px; margin: 0 auto; }
 
+  /* ── HERO ── */
   #hero {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 4rem 7rem;
+    padding: 6rem 4rem 4rem;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: stretch;
   }
   .hero-bg-circle {
-    position: absolute;
-    width: 700px;
-    height: 700px;
-    border-radius: 50%;
+    position: absolute; width: 700px; height: 700px; border-radius: 50%;
     background: radial-gradient(circle, rgba(200,169,110,0.07) 0%, transparent 70%);
-    top: 5%;
-    right: -15%;
-    pointer-events: none;
-    will-change: transform;
+    top: 5%; right: -15%; pointer-events: none; will-change: transform;
   }
-  .hero-bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(200,169,110,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,169,110,0.025) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 70%);
-    pointer-events: none;
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 4rem; align-items: end;
+    position: relative;
   }
-  .hero-kicker {
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 2rem;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.8s 0.2s forwards;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .hero-kicker::before {
-    content: '';
-    display: inline-block;
-    width: 30px;
-    height: 1px;
-    background: var(--accent);
-  }
-  .hero-title-jp {
-    font-family: var(--sans);
-    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
-    font-weight: 400;
-    line-height: 1.5;
-    letter-spacing: 0.02em;
-    margin-bottom: 2rem;
-    color: var(--text);
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeUp 0.9s 0.35s forwards;
-  }
-  .hero-title-jp .accent { color: var(--accent); }
+  .hero-left { padding-bottom: 2rem; }
   .hero-sub {
-    font-size: 0.95rem;
-    color: var(--muted);
-    max-width: 480px;
-    margin-bottom: 3rem;
-    line-height: 1.9;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.8s 0.5s forwards;
+    font-size: 1rem; color: var(--text-soft); max-width: 460px;
+    margin-bottom: 1.2rem; line-height: 2;
+    opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.5s forwards;
   }
-  .hero-cta {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.8s 0.65s forwards;
+  .hero-note {
+    font-size: 0.9rem; color: var(--text-soft); letter-spacing: 0.02em; margin-bottom: 3rem;
+    opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.55s forwards;
   }
-  .btn-primary {
-    display: inline-block;
-    padding: 0.95rem 2.4rem;
-    background: var(--accent);
-    color: #0a0a0b;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: var(--radius);
-    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  .hero-cta { opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.65s forwards; }
+  .link-arrow {
+    color: var(--accent); text-decoration: none; font-size: 0.95rem;
+    display: inline-flex; align-items: center; gap: 0.6rem; transition: gap 0.3s;
+    border-bottom: 1px solid transparent;
   }
-  .btn-primary:hover {
-    background: var(--accent2);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(200,169,110,0.25);
-  }
-  .btn-ghost {
-    color: var(--muted);
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-decoration: none;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    transition: color 0.3s;
-    padding: 0.95rem 0;
-  }
-  .btn-ghost:hover { color: var(--text); }
-  .btn-ghost::after { content: '→'; transition: transform 0.3s; }
-  .btn-ghost:hover::after { transform: translateX(6px); }
-
-  .hero-scroll-hint {
-    position: absolute;
-    bottom: 2.5rem;
-    right: 4rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--muted);
+  .link-arrow::after { content: '→'; }
+  .link-arrow:hover { gap: 1rem; border-color: var(--border); }
+  .hero-title {
     writing-mode: vertical-rl;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    opacity: 0;
-    animation: fadeUp 1s 1s forwards;
+    font-family: var(--serif-jp);
+    font-weight: 300;
+    font-size: clamp(3.2rem, 8vw, 6.4rem);
+    line-height: 1.25;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    height: min(72vh, 620px);
+    align-self: start;
+    margin-top: 2rem;
+    opacity: 0; transform: translateX(20px); animation: fadeLeft 1s 0.3s forwards;
   }
-  .hero-scroll-hint::before {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(to bottom, var(--accent), transparent);
-    animation: scrollLine 2s 1.5s infinite;
+  .hero-scroll-hint {
+    position: absolute; bottom: 2.5rem; right: 4rem;
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
+    writing-mode: vertical-rl; display: flex; align-items: center; gap: 1rem;
+    opacity: 0; animation: fadeUp 1s 1s forwards;
   }
+  .hero-scroll-hint::before { content: ''; display: block; width: 1px; height: 60px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollLine 2s 1.5s infinite; }
 
+  /* ── COMMON ── */
   .section-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.8rem;
   }
-  .section-label::before {
-    content: '';
-    width: 24px;
-    height: 1px;
-    background: var(--accent);
-    display: inline-block;
-  }
+  .section-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); display: inline-block; }
   .section-title {
-    font-family: var(--serif);
-    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
-    font-weight: 400;
-    line-height: 1.3;
-    margin-bottom: 2rem;
-    letter-spacing: 0.01em;
+    font-family: var(--serif); font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    font-weight: 400; line-height: 1.3; margin-bottom: 2rem; letter-spacing: 0.01em;
   }
   .section-title em { font-style: italic; color: var(--accent); }
-  .divider {
-    width: 50px;
-    height: 1px;
-    background: var(--accent);
-    margin-bottom: 3rem;
-    opacity: 0.5;
-  }
+  .about-brand { font-family: var(--mono); font-weight: 300; letter-spacing: 0.01em; }
+  .divider { width: 50px; height: 1px; background: var(--accent); margin-bottom: 3rem; opacity: 0.5; }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: none; }
 
-  #philosophy {
-    background: var(--bg);
-    padding: 9rem 4rem;
-    text-align: center;
-  }
-  .philosophy-quote { max-width: 800px; margin: 0 auto; }
-  .philosophy-mark {
-    font-family: var(--serif);
-    font-size: 5rem;
-    color: var(--accent);
-    line-height: 0.5;
-    margin-bottom: 1rem;
-    opacity: 0.4;
-  }
-  .philosophy-text {
-    font-family: var(--serif);
-    font-size: clamp(1.5rem, 3vw, 2.4rem);
-    font-weight: 400;
-    line-height: 1.7;
-    color: var(--text);
-    font-style: italic;
-    margin-bottom: 2.5rem;
-  }
-  .philosophy-text .accent { color: var(--accent); font-style: normal; }
-  .philosophy-author {
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  #about { background: var(--bg2); }
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 6rem;
-    align-items: start;
-  }
-  .about-left { position: relative; }
-  .about-photo-wrap {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-  }
-  .about-photo-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    color: var(--muted);
-  }
-  .photo-icon {
-    width: 60px;
-    height: 60px;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-  }
-  .about-photo-placeholder p { font-size: 0.75rem; letter-spacing: 0.1em; }
-  .about-tag {
-    position: absolute;
-    bottom: -1.5rem;
-    right: -1.5rem;
-    background: var(--accent);
-    color: #0a0a0b;
-    padding: 1rem 1.5rem;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    z-index: 2;
-  }
-  .about-body p {
-    color: var(--text-soft);
-    margin-bottom: 1.5rem;
-    line-height: 1.95;
-    font-size: 0.95rem;
-  }
-  .about-body p strong { color: var(--accent); font-weight: 400; }
-  .about-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
-    padding-top: 3rem;
-    border-top: 1px solid var(--border2);
-  }
-  .stat-num {
-    font-family: var(--serif);
-    font-size: 2.8rem;
-    color: var(--accent);
-    line-height: 1;
-    font-weight: 500;
-  }
-  .stat-label {
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-top: 0.5rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
+  /* ── PRINCIPLES ── */
   #principles { background: var(--bg); }
-  .principles-intro { max-width: 600px; margin-bottom: 4rem; color: var(--muted); }
-  .principles-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
-    background: var(--border2);
+  .principle {
+    display: grid; grid-template-columns: 90px 1fr; gap: 2rem;
+    padding: 3.5rem 0; border-top: 1px solid var(--border2);
   }
-  .principle-card {
-    background: var(--bg);
-    padding: 3rem 2.5rem;
-    transition: background 0.4s;
-    position: relative;
-    overflow: hidden;
-  }
-  .principle-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 2px;
-    height: 0;
-    background: var(--accent);
-    transition: height 0.4s;
-  }
-  .principle-card:hover { background: var(--bg2); }
-  .principle-card:hover::before { height: 100%; }
-  .principle-num {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-    opacity: 0.6;
-    margin-bottom: 2rem;
-    letter-spacing: 0.1em;
-  }
-  .principle-name {
-    font-family: var(--serif);
-    font-size: 1.3rem;
-    font-weight: 400;
-    margin-bottom: 1rem;
-    line-height: 1.4;
-  }
-  .principle-name .accent { color: var(--accent); font-style: italic; }
-  .principle-desc {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.8;
-  }
+  .principle-num { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.12em; color: var(--accent); opacity: 0.55; padding-top: 0.6rem; transition: opacity 0.3s; }
+  .principle:hover .principle-num { opacity: 1; }
+  .principle-name { font-family: var(--serif); font-size: 1.7rem; font-weight: 400; margin-bottom: 0.7rem; line-height: 1.3; }
+  .principle-name em { font-style: italic; color: var(--accent); }
+  .principle-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.85; max-width: 620px; margin-bottom: 2.2rem; }
 
-  #services { background: var(--bg2); }
-  .services-intro { max-width: 600px; margin-bottom: 4rem; color: var(--muted); }
-  .services-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5px;
-    background: var(--border2);
+  /* ── DEMO 共通 ── */
+  .demo { background: var(--bg2); border: 1px solid var(--border2); padding: 2rem; max-width: 760px; }
+  .demo-label { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 0.6rem; }
+  .demo-task { font-size: 0.95rem; color: var(--text); margin-bottom: 1.4rem; }
+  .demo-task strong { color: var(--accent); font-weight: 400; }
+  .demo-after { max-height: 0; opacity: 0; overflow: hidden; transform: translateY(8px); transition: max-height 0.7s ease, opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s; }
+  .demo-after.show { max-height: 600px; opacity: 1; transform: none; }
+  .demo-basis { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.04em; color: var(--muted); line-height: 1.8; margin: 1.4rem 0 0; padding-top: 1rem; border-top: 1px solid var(--border2); }
+  .demo-basis + .demo-explain { margin-top: 0.8rem; }
+  .demo-basis b { color: var(--accent); font-weight: 400; }
+  .demo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .demo-panel {
+    background: var(--bg3); border: 1px solid var(--border2); padding: 1.1rem;
+    min-height: 240px; display: flex; flex-direction: column; gap: 0.45rem;
   }
-  .service-card {
-    background: var(--bg2);
-    padding: 3rem 2.5rem;
-    transition: background 0.4s;
-    position: relative;
+  .demo-panel-head { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+  .demo-btn {
+    font-size: 0.85rem; color: var(--text); background: var(--bg2);
+    border: 1px solid var(--border2); padding: 0.6rem 0.9rem; text-align: left; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
   }
-  .service-card:hover { background: var(--bg3); }
-  .service-icon {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.1em;
-  }
-  .service-name {
-    font-family: var(--serif);
-    font-size: 1.6rem;
-    font-weight: 400;
-    margin-bottom: 1rem;
-  }
-  .service-desc {
-    font-size: 0.9rem;
-    color: var(--muted);
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-  }
-  .service-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .tag {
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    padding: 0.3rem 0.85rem;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: var(--mono);
-    border-radius: 2px;
-  }
+  .demo-btn:hover { border-color: var(--accent); }
+  .demo-btn:disabled { opacity: 0.4; cursor: default; }
+  .demo-btn.primary { border-color: var(--accent); }
+  .demo-icons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
+  .demo-icons .demo-btn { text-align: center; font-size: 1.1rem; padding: 0.7rem 0; }
+  .demo-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .demo-opts.three { grid-template-columns: 1fr; }
+  .demo-result { margin-top: auto; padding-top: 0.8rem; font-family: var(--mono); font-size: 0.78rem; color: var(--accent); min-height: 1.6em; }
+  .demo-explain { margin-top: 1.4rem; font-size: 0.82rem; color: var(--muted); line-height: 1.8; }
+  .demo-reset { margin-top: 0.8rem; background: none; border: none; color: var(--muted); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; cursor: pointer; padding: 0; }
+  .demo-reset:hover { color: var(--accent); }
 
-  #work { background: var(--bg); }
+  /* ── iOS風モック（迷うUIデモ） ── */
+  .demo-panel.ios { align-items: center; }
+  .demo-panel.ios .demo-panel-head { align-self: stretch; }
+  .ph {
+    position: relative; width: 100%; max-width: 210px; height: 320px;
+    background: #000; border-radius: 26px; border: 1px solid rgba(255,255,255,0.12);
+    overflow: hidden; font-family: -apple-system, 'Hiragino Sans', var(--sans); color: #fff;
+    -webkit-user-select: none; user-select: none;
+  }
+  .ph-top { position: absolute; top: 0; left: 0; right: 0; height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 13px; z-index: 2; }
+  .ph-top .back { color: #0a84ff; display: flex; align-items: center; gap: 2px; }
+  .ph-top .back::before { content: '‹'; font-size: 22px; line-height: 1; margin-top: -3px; }
+  .ph-photo { position: absolute; inset: 44px 0 56px; background: linear-gradient(150deg, #4b5c7a, #2a3348 55%, #6e5a4a); }
+  .ph-photo::after { content: ''; position: absolute; left: 22%; bottom: 18%; width: 46%; height: 30%; border-radius: 50% 50% 8px 8px; background: rgba(255,255,255,0.08); }
+  .ph-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; background: rgba(28,28,30,0.96); display: flex; align-items: center; justify-content: space-around; padding: 0 4px; z-index: 2; }
+  .ph-btn {
+    background: none; border: none; color: #0a84ff; cursor: pointer;
+    min-width: 44px; min-height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    font-size: 10px; font-family: inherit; border-radius: 10px; -webkit-tap-highlight-color: transparent;
+  }
+  .ph-btn:active { background: rgba(255,255,255,0.08); }
+  .ph-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .ph-btn.red { color: #ff453a; }
+  .ph-btn.icon-only { color: #fff; }
+  .ph-sheet {
+    position: absolute; left: 0; right: 0; bottom: 0; max-height: 84%; background: #1c1c1e;
+    border-radius: 16px 16px 0 0; z-index: 3; transform: translateY(105%); transition: transform 0.3s cubic-bezier(.2,.8,.2,1);
+    display: flex; flex-direction: column;
+  }
+  .ph-sheet.open { transform: none; }
+  .ph-scrim { position: absolute; inset: 0; background: rgba(0,0,0,0.4); z-index: 2; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .ph-scrim.on { opacity: 1; pointer-events: auto; }
+  .ph-grab { width: 36px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.3); margin: 8px auto 6px; flex: none; }
+  .ph-sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 0 12px 6px; font-size: 12px; flex: none; }
+  .ph-sheet-head b { font-weight: 600; }
+  .ph-x { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.14); color: #ddd; border: none; font-size: 13px; cursor: pointer; }
+  .ph-apps { display: flex; gap: 12px; padding: 4px 12px 10px; overflow: hidden; flex: none; }
+  .ph-app { width: 44px; flex: none; text-align: center; font-size: 8px; color: #bbb; }
+  .ph-app i { display: block; width: 44px; height: 44px; border-radius: 11px; margin-bottom: 3px; }
+  .ph-list { border-top: 1px solid rgba(255,255,255,0.08); overflow-y: auto; }
+  .ph-row {
+    width: 100%; background: none; border: none; color: #fff; font-family: inherit; font-size: 12px; text-align: left;
+    padding: 0 14px; min-height: 42px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.08); -webkit-tap-highlight-color: transparent;
+  }
+  .ph-row:active { background: rgba(255,255,255,0.06); }
+  .ph-row.red { color: #ff453a; }
+  .ph-row svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; }
+  .ph-done { position: absolute; inset: 0; z-index: 4; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); }
+  .ph-done.on { display: flex; }
+  .ph-done div { background: rgba(60,60,64,0.95); border-radius: 14px; padding: 14px 18px; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ph-done svg { width: 28px; height: 28px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ── 乗換案内デモ（iOS風） ── */
+  .rt-ph { height: 400px; }
+  .rt-nav { position: absolute; top: 0; left: 0; right: 0; height: 46px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; z-index: 2; background: rgba(28,28,30,0.96); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .rt-body { position: absolute; inset: 46px 0 0; overflow-y: auto; padding: 12px 10px 16px; }
+  .rt-body::-webkit-scrollbar { display: none; }
+  .rt-sec { font-size: 9.5px; color: #8e8e93; letter-spacing: 0.06em; margin: 12px 6px 6px; }
+  .rt-fav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .rt-fav button {
+    background: #1c1c1e; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #fff;
+    font-family: inherit; font-size: 11px; padding: 10px 8px; min-height: 58px; cursor: pointer; text-align: left;
+    display: flex; flex-direction: column; gap: 4px; -webkit-tap-highlight-color: transparent;
+  }
+  .rt-fav button:active { background: #2c2c2e; }
+  .rt-fav b { font-weight: 600; font-size: 12px; }
+  .rt-fav small { color: #8e8e93; font-size: 9.5px; }
+  .rt-form { background: #1c1c1e; border-radius: 12px; overflow: hidden; }
+  .rt-field {
+    width: 100%; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px;
+    background: none; border: none; border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: #fff; font-family: inherit; font-size: 12px; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .rt-field:last-child { border-bottom: none; }
+  .rt-field:active { background: rgba(255,255,255,0.06); }
+  .rt-field i { width: 8px; height: 8px; border-radius: 50%; flex: none; border: 2px solid #8e8e93; }
+  .rt-field.to i { background: #ff453a; border-color: #ff453a; }
+  .rt-field .val { color: #8e8e93; }
+  .rt-field.filled .val { color: #fff; }
+  .rt-search { display: block; width: 100%; margin-top: 12px; background: #0a84ff; color: #fff; border: none; border-radius: 12px; font-size: 13.5px; font-weight: 600; min-height: 46px; cursor: pointer; font-family: inherit; }
+  .rt-search:disabled { background: #2c2c2e; color: #636366; cursor: default; }
+  .rt-result { position: absolute; inset: 46px 0 0; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #000; z-index: 3; }
+  .rt-card { background: #1c1c1e; border-radius: 12px; padding: 12px 14px; }
+  .rt-card .t { font-size: 20px; font-weight: 600; }
+  .rt-card .t small { font-size: 11px; color: #8e8e93; font-weight: 400; margin-left: 6px; }
+  .rt-line { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 10px; color: #bbb; }
+  .rt-line i { height: 6px; border-radius: 3px; display: block; }
+  .rt-card.dim { opacity: 0.55; }
+
+  /* ── デモ内スライド ── */
+  .demo-head-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.6rem; }
+  .demo-head-row .demo-label { margin-bottom: 0; }
+  .demo-arrows { display: flex; gap: 0.4rem; }
+  .demo-arrow {
+    width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: none;
+    color: var(--accent); font-size: 1.3rem; line-height: 1; cursor: pointer; transition: background 0.15s, border-color 0.15s;
+    display: flex; align-items: center; justify-content: center; padding: 0 0 2px;
+  }
+  .demo-arrow:hover:not(:disabled) { background: var(--accent-dim); }
+  .demo-arrow:disabled { opacity: 0.25; cursor: default; }
+  .demo-slide { display: none; }
+  .demo-slide.on { display: block; }
+
+  /* ── ドリンクメニューデモ（iOS風） ── */
+  .pick { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+  .pick-steps { display: flex; gap: 0.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; color: var(--muted); }
+  .pick-steps span { padding: 0.25rem 0.7rem; border: 1px solid var(--border2); border-radius: 999px; transition: color 0.2s, border-color 0.2s; }
+  .pick-steps span.on { color: var(--accent); border-color: var(--accent); }
+  .pick-steps span.done { color: var(--text-soft); border-color: var(--border); }
+  .pick-ph { max-width: 250px; height: 430px; }
+  .pk-nav { position: absolute; top: 0; left: 0; right: 0; height: 46px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; z-index: 2; background: rgba(28,28,30,0.96); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .pk-body { position: absolute; inset: 46px 0 0; overflow-y: auto; padding: 12px; }
+  .pk-body::-webkit-scrollbar { display: none; }
+  .pk-intro { position: absolute; inset: 46px 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 20px; text-align: center; }
+  .pk-intro p { font-size: 12px; color: #bbb; line-height: 1.7; }
+  .pk-intro b { display: block; font-size: 15px; color: #fff; font-weight: 600; margin-bottom: 4px; }
+  .pk-go { background: #0a84ff; color: #fff; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; padding: 12px 28px; cursor: pointer; font-family: inherit; min-height: 46px; }
+  .pk-go:active { background: #0066cc; }
+  .pk-sec { font-size: 9.5px; color: #8e8e93; letter-spacing: 0.06em; margin: 4px 4px 8px; }
+  .pk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .pk-grid.big { grid-template-columns: 1fr; gap: 8px; }
+  .pk-item {
+    background: #1c1c1e; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    min-height: 72px; padding: 8px 4px; font-size: 10.5px; font-family: inherit; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; transition: background 0.12s, transform 0.12s;
+  }
+  .pk-grid.big .pk-item { flex-direction: row; justify-content: flex-start; gap: 14px; min-height: 60px; padding: 0 16px; font-size: 14px; }
+  .pk-item:active { background: #2c2c2e; transform: scale(0.97); }
+  .pk-item:disabled { cursor: default; }
+  .pk-item.sel { background: #0a84ff; border-color: #0a84ff; }
+  .pk-item i { width: 30px; height: 30px; border-radius: 50%; display: block; flex: none; }
+  .pk-grid.big .pk-item i { width: 34px; height: 34px; }
+  .pk-more { background: none; border: 1px dashed rgba(255,255,255,0.25); color: #0a84ff; font-weight: 600; }
+  .pk-more::after { content: '›'; margin-left: auto; font-size: 20px; color: rgba(255,255,255,0.4); }
+  .pk-result { position: absolute; inset: 46px 0 0; padding: 20px 16px; display: flex; flex-direction: column; gap: 14px; }
+  .pk-bar { display: flex; flex-direction: column; gap: 5px; }
+  .pk-bar label { display: flex; justify-content: space-between; font-size: 11px; color: #bbb; }
+  .pk-bar label b { color: #fff; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .pk-bar i { display: block; height: 10px; border-radius: 5px; background: #48484a; width: 0; transition: width 0.7s cubic-bezier(.2,.8,.2,1); }
+  .pk-bar.fast i { background: #0a84ff; }
+  .pk-verdict { margin-top: auto; text-align: center; font-size: 13px; line-height: 1.6; color: #fff; }
+  .pk-verdict b { font-size: 26px; font-weight: 600; color: #0a84ff; display: block; }
+  .pk-verdict small { display: block; font-size: 10px; color: #8e8e93; margin-top: 4px; line-height: 1.6; }
+
+  /* ── アラートデモ（iOS風） ── */
+  .al-ph { height: 340px; }
+  .al-nav { position: absolute; top: 0; left: 0; right: 0; height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 13px; z-index: 2; background: rgba(28,28,30,0.96); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .al-nav b { font-weight: 600; }
+  .al-close { background: none; border: none; color: #0a84ff; font-family: inherit; font-size: 13px; cursor: pointer; min-height: 44px; padding: 0 6px; -webkit-tap-highlight-color: transparent; }
+  .al-body { position: absolute; inset: 46px 0 0; padding: 14px; font-size: 12.5px; line-height: 1.8; color: #ddd; }
+  .al-body.usb { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; color: #8e8e93; }
+  .al-body.usb svg { width: 40px; height: 40px; fill: none; stroke: #8e8e93; stroke-width: 1.5; stroke-linecap: round; }
+  .al-body .cur { display: inline-block; width: 1.5px; height: 14px; background: #0a84ff; vertical-align: -2px; animation: alBlink 1s steps(2) infinite; }
+  @keyframes alBlink { to { opacity: 0; } }
+  .al-dim { position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 3; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .al-dim.on { display: flex; }
+  .al-box { width: 100%; max-width: 200px; background: rgba(44,44,46,0.98); border-radius: 14px; overflow: hidden; text-align: center; animation: alPop 0.18s ease-out; }
+  @keyframes alPop { from { transform: scale(1.08); opacity: 0; } }
+  .al-box .t { font-size: 13px; font-weight: 600; padding: 14px 14px 4px; }
+  .al-box .m { font-size: 11px; color: #ccc; padding: 0 14px 12px; line-height: 1.5; }
+  .al-btns { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,0.14); }
+  .al-btns.stack { grid-template-columns: 1fr; }
+  .al-btn { background: none; border: none; color: #0a84ff; font-family: inherit; font-size: 13px; min-height: 44px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .al-btns:not(.stack) .al-btn + .al-btn { border-left: 1px solid rgba(255,255,255,0.14); }
+  .al-btns.stack .al-btn + .al-btn { border-top: 1px solid rgba(255,255,255,0.14); }
+  .al-btn:active { background: rgba(255,255,255,0.08); }
+  .al-btn.bold { font-weight: 600; }
+  .al-btn.red { color: #ff453a; }
+  .al-gone { position: absolute; inset: 46px 0 0; display: none; align-items: center; justify-content: center; color: #8e8e93; font-size: 12px; z-index: 2; background: #000; }
+  .al-gone.on { display: flex; }
+
+  /* ── WORK ── */
+  #work { background: var(--bg2); }
   .work-intro { max-width: 600px; margin-bottom: 5rem; color: var(--muted); }
   .work-grid { display: flex; flex-direction: column; gap: 7rem; }
   .work-item {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 5rem;
-    align-items: center;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.7s, transform 0.7s;
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: center;
+    opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s;
   }
   .work-item.visible { opacity: 1; transform: none; }
   .work-item:nth-child(even) { direction: rtl; }
   .work-item:nth-child(even) > * { direction: ltr; }
   .work-screens { position: relative; height: 460px; }
   .phone-frame {
-    position: absolute;
-    width: 200px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 28px;
-    overflow: hidden;
-    aspect-ratio: 9/19;
-    transition: transform 0.5s ease;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    position: absolute; width: 200px; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 28px; overflow: hidden;
+    aspect-ratio: 9/19; transition: transform 0.5s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   }
   .phone-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .phone1 {
-    top: 10px;
-    left: 30px;
-    z-index: 2;
-    transform: rotate(-3deg);
-  }
-  .phone2 {
-    top: 70px;
-    left: 170px;
-    z-index: 1;
-    opacity: 0.85;
-    transform: rotate(3deg);
-  }
+  .phone1 { top: 10px; left: 30px; z-index: 2; transform: rotate(-3deg); }
+  .phone2 { top: 70px; left: 170px; z-index: 1; opacity: 0.85; transform: rotate(3deg); }
   .work-item:hover .phone1 { transform: rotate(-1deg) translateY(-8px); }
   .work-item:hover .phone2 { transform: rotate(1deg) translateY(-8px); }
-
   .work-body .app-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem;
   }
-  .work-body .app-label::before {
-    content: '';
-    width: 18px;
-    height: 1px;
-    background: var(--accent);
-  }
-  .work-body h3 {
-    font-family: var(--serif);
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 400;
-    margin-bottom: 1.2rem;
-    line-height: 1.2;
-  }
+  .work-body .app-label::before { content: ''; width: 18px; height: 1px; background: var(--accent); }
+  .work-body h3 { font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 400; margin-bottom: 1.2rem; line-height: 1.2; }
   .work-body > p { color: var(--muted); margin-bottom: 1.5rem; line-height: 1.85; }
-
-  .feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 1.5rem 0 2rem;
-    border-top: 1px solid var(--border2);
-  }
-  .feature-list li {
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border2);
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.65;
-    transition: padding-left 0.3s;
-  }
+  .feature-list { list-style: none; padding: 0; margin: 1.5rem 0 2rem; border-top: 1px solid var(--border2); }
+  .feature-list li { padding: 1rem 0; border-bottom: 1px solid var(--border2); font-size: 0.85rem; color: var(--muted); line-height: 1.65; transition: padding-left 0.3s; }
   .feature-list li:hover { padding-left: 0.5rem; }
-  .feature-list li strong {
-    display: block;
-    color: var(--text);
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    margin-bottom: 0.3rem;
-  }
-  .work-meta {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-    padding-top: 1rem;
-  }
+  .feature-list li strong { display: block; color: var(--text); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.02em; margin-bottom: 0.3rem; }
+  .work-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; padding-top: 1rem; }
   .work-meta-item { font-size: 0.8rem; color: var(--muted); }
-  .work-meta-item strong {
-    display: block;
-    color: var(--accent);
-    font-size: 0.65rem;
-    font-weight: 400;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
-  }
+  .work-meta-item strong { display: block; color: var(--accent); font-size: 0.65rem; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.4rem; }
   .appstore-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.8rem 1.6rem;
-    border: 1px solid var(--border);
-    color: var(--text);
-    text-decoration: none;
-    font-size: 0.78rem;
-    border-radius: 6px;
-    transition: border-color 0.3s, background 0.3s, transform 0.2s;
-    letter-spacing: 0.05em;
+    display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.8rem 1.6rem;
+    border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 0.78rem;
+    border-radius: 6px; transition: border-color 0.3s, background 0.3s, transform 0.2s; letter-spacing: 0.05em;
   }
-  .appstore-btn:hover {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-    transform: translateY(-2px);
-  }
+  .appstore-btn:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
   .appstore-logo { font-size: 1.1rem; line-height: 1; }
 
-  #why-japan { background: var(--bg2); position: relative; overflow: hidden; }
-  .why-japan-bg {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(200,169,110,0.05) 0%, transparent 70%);
-    top: 20%;
-    left: -10%;
+  /* ── CleanWars デモ ── */
+  .cw-demo { background: var(--bg); border: 1px solid var(--border2); padding: 1.6rem; margin: 0 0 2rem; }
+  .cw-stage { position: relative; height: 260px; margin: 1.2rem 0 0.6rem; user-select: none; -webkit-user-select: none; }
+  .cw-hint {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.15em; color: var(--muted);
+    pointer-events: none; transition: color 0.15s, opacity 0.15s; opacity: 0.6;
+  }
+  .cw-hint.l { left: 0; } .cw-hint.r { right: 0; }
+  .cw-hint.on { opacity: 1; }
+  .cw-hint.l.on { color: var(--danger); } .cw-hint.r.on { color: var(--ok); }
+  .cw-card {
+    position: absolute; inset: 0; margin: auto; width: 176px; height: 236px;
+    border: 1px solid var(--border); overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 0.9rem;
+    touch-action: pan-y; will-change: transform;
+    transition: transform 0.32s cubic-bezier(.2,.8,.2,1), opacity 0.32s ease, box-shadow 0.2s;
+    transform: translateY(calc(var(--d) * 10px)) scale(calc(1 - var(--d) * 0.06));
+    z-index: calc(10 - var(--d));
     pointer-events: none;
+    background-clip: padding-box;
   }
-  .why-japan-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 5rem;
-    align-items: start;
-    position: relative;
+  .cw-card.far { visibility: hidden; }
+  .cw-card.top { pointer-events: auto; cursor: grab; box-shadow: 0 14px 40px rgba(0,0,0,0.5); }
+  .cw-card.dragging { transition: none; cursor: grabbing; }
+  .cw-card.out { opacity: 0; transition: transform 0.36s cubic-bezier(.4,0,.8,.4), opacity 0.36s ease; z-index: 20; }
+  .cw-card.new { transition: none; }
+  /* 写真らしい光沢 + 文字用の足元の陰 */
+  .cw-card::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(160deg, rgba(255,255,255,0.10), transparent 40%), linear-gradient(to top, rgba(0,0,0,0.55), transparent 45%);
   }
-  .why-japan-symbol {
-    font-family: var(--serif);
-    font-size: clamp(8rem, 18vw, 16rem);
-    line-height: 0.9;
-    color: var(--accent);
-    font-weight: 400;
-    text-align: center;
-    opacity: 0.95;
+  /* 奥のカードは透明ではなく「暗くする」。透けない */
+  .cw-card::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: var(--bg); opacity: calc(var(--d) * 0.35); transition: opacity 0.32s;
   }
-  .why-japan-symbol-sub {
-    text-align: center;
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 1rem;
+  .cw-card.top::after { opacity: 0; }
+  /* 奥のカードは文字を消す。手前の1枚だけ読める */
+  .cw-card:not(.top) .cw-card-name, .cw-card:not(.top) .cw-card-size { opacity: 0; }
+  .cw-card-name, .cw-card-size { position: relative; z-index: 2; transition: opacity 0.2s; }
+  .cw-card-name { font-family: var(--mono); font-size: 0.7rem; color: var(--text); }
+  .cw-card-size { font-family: var(--mono); font-size: 0.65rem; color: var(--text-soft); opacity: 0.8; }
+  .cw-tag {
+    position: absolute; top: 0.8rem; padding: 0.3rem 0.6rem;
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.18em;
+    border: 1px solid currentColor; opacity: 0; transform: rotate(-8deg); pointer-events: none; z-index: 3;
+    background: rgba(10,10,11,0.5);
   }
-  .why-japan-points {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  .why-point {
-    display: grid;
-    grid-template-columns: 50px 1fr;
-    gap: 1.5rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--border2);
-  }
-  .why-point:last-child { border-bottom: none; }
-  .why-point-num {
-    font-family: var(--serif);
-    font-size: 1.5rem;
-    color: var(--accent);
-    font-style: italic;
-  }
-  .why-point h4 {
-    font-size: 1rem;
-    font-weight: 400;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-  }
-  .why-point p {
-    color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.8;
-  }
+  .cw-tag.del { left: 0.8rem; color: var(--danger); }
+  .cw-tag.keep { right: 0.8rem; color: var(--ok); transform: rotate(8deg); }
+  .cw-veil { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity 0.1s; z-index: 1; }
+  .cw-veil.del { background: rgba(200,110,110,0.22); }
+  .cw-veil.keep { background: rgba(127,181,138,0.22); }
+  .cw-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.4rem; }
+  .cw-actions .demo-btn { text-align: center; letter-spacing: 0.05em; transition: border-color 0.15s, background 0.15s, transform 0.1s; }
+  .cw-actions .del { border-color: rgba(200,110,110,0.45); }
+  .cw-actions .keep { border-color: rgba(127,181,138,0.45); }
+  .cw-actions .del:hover { background: rgba(200,110,110,0.10); border-color: var(--danger); }
+  .cw-actions .keep:hover { background: rgba(127,181,138,0.10); border-color: var(--ok); }
+  .cw-actions .demo-btn:active { transform: scale(0.97); }
+  .cw-actions .demo-btn:disabled { opacity: 0.35; }
+  .cw-progress { display: flex; gap: 0.35rem; justify-content: center; margin: 0.9rem 0 0.4rem; }
+  .cw-progress i { width: 18px; height: 3px; background: var(--border2); display: block; transition: background 0.2s; }
+  .cw-progress i.cur { background: var(--accent); }
+  .cw-progress i.del { background: var(--danger); }
+  .cw-progress i.keep { background: var(--ok); }
+  .cw-status { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 0.4rem; }
+  .cw-status span b { color: var(--accent); font-weight: 400; }
+  .cw-undo { background: none; border: none; color: var(--muted); font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; cursor: pointer; padding: 0.2rem 0; transition: color 0.15s; }
+  .cw-undo:hover { color: var(--accent); }
+  .cw-undo:disabled { opacity: 0.3; cursor: default; }
+  .cw-keys { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); opacity: 0.6; text-align: center; margin-top: 0.6rem; }
+  .cw-result { display: none; }
+  .cw-result.show { display: block; }
+  .cw-score { font-family: var(--serif); font-size: 2.6rem; color: var(--accent); line-height: 1; margin: 0.6rem 0 1.2rem; }
+  .cw-score small { font-size: 1rem; color: var(--muted); margin-left: 0.4rem; }
+  .cw-rank { list-style: none; border-top: 1px solid var(--border2); }
+  .cw-rank li { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 0.8rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border2); font-size: 0.82rem; color: var(--muted); font-family: var(--mono); }
+  .cw-rank li.me { color: var(--text); }
+  .cw-rank li.me span:first-child { color: var(--accent); }
+  @media (hover: none) { .cw-keys { display: none; } }
 
-  #process { background: var(--bg); }
-  .process-steps { display: flex; flex-direction: column; }
-  .process-step {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 2rem;
-    padding: 3rem 0;
-    border-bottom: 1px solid var(--border2);
-    position: relative;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.6s, transform 0.6s, background 0.3s;
+  /* ── APPROACH ── */
+  #why-me { background: var(--bg); padding-top: 6rem; padding-bottom: 6rem; }
+  .why-lead { color: var(--muted); font-size: 0.9rem; line-height: 1.85; max-width: 640px; margin-bottom: 2.5rem; }
+  .case-list { display: flex; flex-direction: column; gap: 0.6rem; max-width: 720px; }
+  .case {
+    width: 100%; text-align: left; background: var(--bg2); border: 1px solid var(--border2); border-radius: 14px;
+    color: var(--text); font-family: inherit; cursor: pointer; padding: 0; overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .process-step.visible { opacity: 1; transform: none; }
-  .process-step:hover { background: rgba(200,169,110,0.02); }
-  .step-num {
-    font-family: var(--serif);
-    font-size: 3rem;
-    color: var(--border);
-    line-height: 1;
-    font-weight: 400;
-    transition: color 0.3s;
-  }
-  .process-step:hover .step-num { color: var(--accent); }
-  .step-content h4 {
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin-bottom: 0.75rem;
-    color: var(--text);
-  }
-  .step-content p {
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.8;
-  }
+  .case:hover, .case.open { border-color: var(--border); }
+  .case.open { background: var(--bg3); }
+  .case-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.2rem; min-height: 56px; }
+  .case-req { font-size: 0.92rem; color: var(--text); }
+  .case-plus { position: relative; width: 22px; height: 22px; flex: none; border: 1px solid var(--border); border-radius: 50%; }
+  .case-plus::before, .case-plus::after { content: ''; position: absolute; left: 50%; top: 50%; background: var(--accent); transform: translate(-50%, -50%); transition: transform 0.25s; }
+  .case-plus::before { width: 9px; height: 1px; }
+  .case-plus::after { width: 1px; height: 9px; }
+  .case.open .case-plus::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .case-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+  .case.open .case-body { grid-template-rows: 1fr; }
+  .case-inner { display: block; overflow: hidden; min-height: 0; }
+  .case-why, .case-sol { display: block; font-size: 0.86rem; line-height: 1.7; padding: 0 1.2rem; }
+  .case-why { color: var(--muted); padding-bottom: 0.4rem; }
+  .case-why::before { content: '課題 '; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--accent); margin-right: 0.3rem; }
+  .case-sol { color: var(--text); padding-bottom: 1.1rem; }
+  .case-sol::before { content: '→ '; color: var(--accent); }
+  .case.open .case-why { padding-top: 0.2rem; }
 
-  #contact {
-    background: var(--bg2);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+  /* ── PROCESS ── */
+  #process { background: var(--bg2); }
+  .timeline { position: relative; max-width: 720px; padding-left: 0; }
+  .timeline::before { content: ''; position: absolute; left: 22px; top: 12px; bottom: 12px; width: 1px; background: linear-gradient(to bottom, var(--accent) 0%, var(--border2) 100%); opacity: 0.6; }
+  .tl-step { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 1.6rem; padding: 0 0 2.6rem; }
+  .tl-step:last-child { padding-bottom: 0; }
+  .tl-num {
+    position: relative; z-index: 1; width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em;
+    color: var(--accent); background: var(--bg2); border: 1px solid var(--border);
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
   }
-  .contact-bg {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 70%);
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    pointer-events: none;
-  }
-  .contact-inner { max-width: 640px; margin: 0 auto; position: relative; }
-  .contact-title {
-    font-family: var(--serif);
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    font-weight: 400;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-  }
-  .contact-title em { font-style: italic; color: var(--accent); }
-  .contact-sub {
-    color: var(--muted);
-    margin-bottom: 3rem;
-    line-height: 1.9;
-  }
-  .contact-email {
-    display: inline-block;
-    font-family: var(--serif);
-    font-size: 1.6rem;
-    color: var(--text);
-    text-decoration: none;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.4rem;
-    margin-bottom: 3rem;
-    transition: border-color 0.3s, color 0.3s, letter-spacing 0.3s;
-  }
-  .contact-email:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-    letter-spacing: 0.02em;
-  }
-  .contact-socials {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-    margin-top: 1rem;
-  }
-  .social-link {
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  .social-link:hover { color: var(--accent); }
+  .tl-step:hover .tl-num { background: var(--accent); color: #0a0a0b; box-shadow: 0 0 0 6px rgba(200,169,110,0.10); }
+  .tl-body { padding-top: 0.55rem; }
+  .tl-body h4 { font-size: 1.1rem; font-weight: 400; margin-bottom: 0.5rem; color: var(--text); }
+  .tl-body p { color: var(--muted); font-size: 0.9rem; line-height: 1.8; max-width: 560px; }
+  .tl-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; }
+  .tl-meta span { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--text-soft); border: 1px solid var(--border2); border-radius: 999px; padding: 0.25rem 0.7rem; background: var(--bg3); }
 
-  footer {
-    padding: 2.5rem 4rem;
-    border-top: 1px solid var(--border2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    background: var(--bg);
+  /* ── ABOUT ── */
+  #about { background: var(--bg); }
+  .about-text { color: var(--text-soft); max-width: 620px; line-height: 2; margin-bottom: 3rem; }
+  .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 620px; padding-top: 3rem; border-top: 1px solid var(--border2); }
+  .stat-num { font-family: var(--mono); font-weight: 500; font-size: 3rem; color: var(--accent); line-height: 1; letter-spacing: 0; }
+  .stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg2); position: relative; overflow: hidden; padding-bottom: 0; }
+  .contact-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 5rem; align-items: start; padding-bottom: 4rem; }
+  .contact-title { font-family: var(--serif-jp); font-weight: 300; font-size: clamp(2.4rem, 5vw, 4.2rem); line-height: 1.25; letter-spacing: 0.04em; margin-bottom: 1.5rem; }
+  .contact-title em { font-style: normal; color: var(--accent); }
+  .contact-sub { color: var(--muted); margin-bottom: 2.5rem; line-height: 1.9; max-width: 480px; }
+  .contact-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 0.7rem; min-height: 56px; padding: 0 1.8rem;
+    border-radius: 999px; border: 1px solid var(--border); color: var(--text); text-decoration: none;
+    font-size: 0.95rem; letter-spacing: 0.02em; transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
   }
+  .cta svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .cta:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .cta.primary { background: var(--accent); color: #0a0a0b; border-color: var(--accent); font-weight: 500; }
+  .cta.primary:hover { background: var(--accent2); box-shadow: 0 12px 32px rgba(200,169,110,0.25); }
+  .contact-side { padding-top: 3.2rem; display: flex; flex-direction: column; gap: 2rem; }
+  .side-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+  .side-link { color: var(--text); text-decoration: none; font-size: 1.05rem; border-bottom: 1px solid var(--border2); padding-bottom: 0.2rem; transition: border-color 0.2s, color 0.2s; }
+  .side-link:hover { color: var(--accent); border-color: var(--accent); }
+  .side-list { list-style: none; color: var(--text-soft); font-size: 0.9rem; line-height: 1.9; }
+  .side-list li::before { content: '— '; color: var(--muted); }
+  .wordmark {
+    font-family: var(--mono); font-weight: 300; font-size: clamp(5rem, 17vw, 17rem); line-height: 0.8; letter-spacing: 0.01em;
+    color: transparent; -webkit-text-stroke: 1px rgba(200,169,110,0.28); white-space: nowrap;
+    text-align: center; transform: translateY(28%); pointer-events: none; user-select: none;
+  }
+  footer { padding: 1.6rem 4rem; border-top: 1px solid var(--border2); display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; background: var(--bg); }
+  .foot-links { display: flex; gap: 1.6rem; }
+  .foot-links a { color: var(--muted); text-decoration: none; letter-spacing: 0.15em; text-transform: uppercase; font-size: 0.68rem; transition: color 0.2s; }
+  .foot-links a:hover { color: var(--accent); }
 
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeLeft { to { opacity: 1; transform: translateX(0); } }
   @keyframes scrollLine { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-  .cursor {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s, opacity 0.2s;
-    mix-blend-mode: difference;
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; mix-blend-mode: difference; }
+  .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(200,169,110,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: all 0.15s ease-out; }
+  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 14px; height: 14px; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 44px; height: 44px; border-color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .hero-sub, .hero-note, .hero-cta, .hero-title, .hero-scroll-hint, .reveal, .work-item { opacity: 1; transform: none; }
   }
-  .cursor-ring {
-    position: fixed;
-    width: 32px;
-    height: 32px;
-    border: 1px solid rgba(200,169,110,0.4);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.15s ease-out;
-  }
-  body:has(a:hover) .cursor { width: 14px; height: 14px; }
-  body:has(a:hover) .cursor-ring { width: 44px; height: 44px; border-color: var(--accent); }
 
   @media (max-width: 900px) {
     nav { padding: 1.25rem 2rem; }
     nav.scrolled { padding: 1rem 2rem; }
+    .nav-logo img { height: 28px; }
     .nav-links { display: none; }
     .hamburger { display: flex; }
     section { padding: 5rem 2rem; }
-    #hero { padding: 0 2rem 5rem; }
-    .hero-scroll-hint { right: 2rem; }
-    #philosophy { padding: 6rem 2rem; }
-    .about-grid { grid-template-columns: 1fr; gap: 4rem; }
-    .about-tag { right: 0; bottom: -1rem; }
-    .principles-grid { grid-template-columns: 1fr; }
-    .services-grid { grid-template-columns: 1fr; }
+    #hero { padding: 5rem 2rem 3rem; min-height: auto; }
+    .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-title { order: -1; justify-self: end; height: 60vh; min-height: 380px; margin-top: 0; font-size: clamp(2.8rem, 14vw, 4.5rem); }
+    .hero-left { padding-bottom: 0; }
+    .hero-scroll-hint { display: none; }
+    .principle { grid-template-columns: 1fr; gap: 0.6rem; }
+    .principle-num { padding-top: 0; }
+
     .work-item { grid-template-columns: 1fr; gap: 3rem; }
     .work-item:nth-child(even) { direction: ltr; }
     .work-screens { height: 380px; }
     .phone-frame { width: 170px; }
     .phone1 { left: 10px; }
     .phone2 { left: 130px; }
-    .why-japan-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-side { padding-top: 0; }
+    .cta { width: 100%; justify-content: center; }
+    .wordmark { transform: translateY(30%); }
     footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
     .cursor, .cursor-ring { display: none; }
   }
   @media (max-width: 600px) {
-    .about-stats { grid-template-columns: 1fr; gap: 1.5rem; }
-    .contact-socials { flex-wrap: wrap; gap: 1.5rem; }
+    .demo { padding: 1.3rem; }
+    .demo-pair, .about-stats { grid-template-columns: 1fr; }
     .work-meta { gap: 1.5rem; }
     .work-screens { height: 340px; }
     .phone-frame { width: 145px; }
@@ -908,164 +659,185 @@
 <div class="cursor-ring" id="cursorRing"></div>
 
 <nav id="navbar">
-  <a href="#hero" class="nav-logo">ToggleStudio</a>
+  <a href="#hero" class="nav-logo"><img src="images/logo.png" alt="ToggleStudio"></a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
     <li><a href="#principles">Principles</a></li>
-    <li><a href="#services">Services</a></li>
     <li><a href="#work">Work</a></li>
+    <li><a href="#why-me">Approach</a></li>
+    <li><a href="#process">Process</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
-
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#about" class="mobile-nav-link">About</a>
   <a href="#principles" class="mobile-nav-link">Principles</a>
-  <a href="#services" class="mobile-nav-link">Services</a>
   <a href="#work" class="mobile-nav-link">Work</a>
+  <a href="#why-me" class="mobile-nav-link">Approach</a>
+  <a href="#process" class="mobile-nav-link">Process</a>
   <a href="#contact" class="mobile-nav-link">Contact</a>
 </div>
 
+<!-- HERO -->
 <section id="hero">
-  <div class="hero-bg-grid"></div>
   <div class="hero-bg-circle"></div>
-  <div class="hero-kicker">iOS App Developer · Web Designer · Japan</div>
-  <h1 class="hero-title-jp">
-    余白から出てくる<span class="accent">"アイデア"</span>。<br>
-    使いやすさは<span class="accent">"デザイン"</span>から。
-  </h1>
-  <p class="hero-sub">心地よいサービスとは、認知心理学に基づき、取捨選択回数を減らして、脳の負担を減らすこと。</p>
-  <div class="hero-cta">
-    <a href="#work" class="btn-primary">実績を見る</a>
-    <a href="#contact" class="btn-ghost">相談する</a>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <p class="hero-sub">認知心理学をもとに、使う人の頭を疲れさせない<br>スマホアプリのデザイン設計をつくります。</p>
+      <p class="hero-note">アプリ開発と、既存Webサイトの改善。</p>
+      <div class="hero-cta"><a href="#work" class="link-arrow">制作実績を見る</a></div>
+    </div>
+    <h1 class="hero-title">迷わない。<br>疲れない。</h1>
   </div>
   <div class="hero-scroll-hint">Scroll</div>
 </section>
 
-<section id="philosophy">
-  <div class="philosophy-quote reveal">
-    <div class="philosophy-mark">"</div>
-    <p class="philosophy-text">
-      デザインは、その人の<span class="accent">顔</span>であり、<span class="accent">人柄</span>。<br>
-      そして、一度きりの<span class="accent">第一印象</span>を決めるもの。
-    </p>
-    <div class="philosophy-author">— ToggleStudio's Belief</div>
-  </div>
-</section>
-
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-left reveal">
-        <div class="about-photo-wrap">
-          <!-- <img src="images/profile.jpg" alt="ToggleStudio Developer" style="width:100%;height:100%;object-fit:cover;"> -->
-          <div class="about-photo-placeholder">
-            <div class="photo-icon">👤</div>
-            <p>プロフィール写真<br>を配置</p>
-          </div>
-        </div>
-        <div class="about-tag">iOS Developer</div>
-      </div>
-      <div class="about-body reveal">
-        <div class="section-label">About</div>
-        <h2 class="section-title">デザインは、<br>サービスの<em>身なり</em>である。</h2>
-        <div class="divider"></div>
-        <p>日本国内で、iOSアプリ開発とWEB制作を手がけています。デザインは、サービスの「身なり」であり、一度きりの<strong>第一印象</strong>を決める要素。身なりを整えることが社会で生きる上での礼儀であるように、デザインを整えることもまた、サービスを世に出す上での前提条件です。</p>
-        <p>だから私は、見た目の美しさだけでなく、<strong>一つひとつの判断に意味を持たせる</strong>ことを徹底しています。認知心理学の知見を取り入れ、ユーザーの視認性とストレスに配慮した設計を追求。Widgetで日常に溶け込むiOSアプリ、想いが正しく伝わるWEBサイトを、日本からお届けします。</p>
-        <div class="about-stats">
-          <div>
-            <div class="stat-num" data-count="12">0</div>
-            <div class="stat-label">App Released</div>
-          </div>
-          <div>
-            <div class="stat-num" data-count="5">0</div>
-            <div class="stat-label">Years</div>
-          </div>
-          <div>
-            <div class="stat-num" data-count="100" data-suffix="%">0</div>
-            <div class="stat-label">Made in Japan</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+<!-- PRINCIPLES -->
 <section id="principles">
   <div class="container">
     <div class="section-label">Design Principles</div>
-    <h2 class="section-title">私が大切にする<br><em>3つの原則</em>。</h2>
+    <h2 class="section-title">3つの<em>原則</em>。</h2>
     <div class="divider"></div>
-    <p class="principles-intro">「ただ良いもの」ではなく、ユーザーの心と暮らしに静かに寄り添う設計を。<br>すべての判断には、根拠と意味があります。</p>
-    <div class="principles-grid">
-      <div class="principle-card reveal">
-        <div class="principle-num">01 / Identity</div>
-        <h3 class="principle-name">デザインは<br><span class="accent">"身なり"</span>である</h3>
-        <p class="principle-desc">サービスの顔であり、人柄を映す存在。整っていない身なりが信用されないように、デザインの整わないプロダクトは選ばれません。だから整えることは、装飾ではなく礼儀です。</p>
+
+    <div class="principle reveal">
+      <div class="principle-num">01</div>
+      <div>
+        <h3 class="principle-name">デザインは<em>身なり</em>である</h3>
+        <p class="principle-desc">サービスの顔であり、人柄。一度きりの第一印象を決める、やり直しの効かないもの。整えることは装飾ではなく、礼儀です。</p>
       </div>
-      <div class="principle-card reveal">
-        <div class="principle-num">02 / Intent</div>
-        <h3 class="principle-name">すべてに<br><span class="accent">意味</span>を持たせる</h3>
-        <p class="principle-desc">色一つ、配置一つに理由を。「なんとなく良い」では足りません。なぜそこにあるのか、なぜその色なのか——一つひとつの判断に複数の根拠を重ね、必然性のあるデザインを生み出します。</p>
+    </div>
+
+    <div class="principle reveal">
+      <div class="principle-num">02</div>
+      <div>
+        <h3 class="principle-name">すべてに<em>理由</em>がある</h3>
+        <p class="principle-desc">色一つ、配置一つに根拠を重ねる。認知心理学は、人を操作するためではなく、人が快適でいるために使います。</p>
+
+        <div class="demo has-slides" id="demo02">
+          <div class="demo-head-row">
+            <div class="demo-label"><span class="slide-title">TRY 1/3 — 迷うUI / 迷わないUI</span></div>
+            <div class="demo-arrows">
+              <button class="demo-arrow" data-slide="-1" aria-label="前のデモ" disabled>‹</button>
+              <button class="demo-arrow" data-slide="1" aria-label="次のデモ">›</button>
+            </div>
+          </div>
+          <div class="demo-slides">
+            <div class="demo-slide on" data-title="TRY 1/3 — 迷うUI / 迷わないUI">
+          <p class="demo-task">この写真を<strong>「保存」</strong>してください。</p>
+          <div class="demo-pair">
+            <div class="demo-panel ios" id="maze-a">
+              <div class="demo-panel-head"><span>よくある画面</span><span class="maze-taps">0.0 秒</span></div>
+              <div class="ph"></div>
+              <div class="demo-result"></div>
+            </div>
+            <div class="demo-panel ios" id="maze-b">
+              <div class="demo-panel-head"><span>迷わない画面</span><span class="maze-taps">0.0 秒</span></div>
+              <div class="ph"></div>
+              <div class="demo-result"></div>
+            </div>
+          </div>
+          <div class="demo-after">
+              <p class="demo-explain">左は、写真アプリによくある形。機能はすべて揃っている。でも「保存」は共有シートの中に隠れていて、アイコンからは辿り着けない。右は、いちばん使う操作に名前を付けて、表に出しただけ。</p>
+              </div>
+              <button class="demo-reset" data-reset="maze">RESET</button>
+            </div>
+            <div class="demo-slide" data-title="TRY 2/3 — 迷うUI / 迷わないUI">
+              <p class="demo-task">書きかけのメモを<strong>残したまま</strong>、画面を閉じてください。</p>
+              <div class="demo-pair">
+                <div class="demo-panel ios" id="alert-a">
+                  <div class="demo-panel-head"><span>よくある画面</span><span class="al-time">0.0 秒</span></div>
+                  <div class="ph al-ph"></div>
+                  <div class="demo-result"></div>
+                </div>
+                <div class="demo-panel ios" id="alert-b">
+                  <div class="demo-panel-head"><span>迷わない画面</span><span class="al-time">0.0 秒</span></div>
+                  <div class="ph al-ph"></div>
+                  <div class="demo-result"></div>
+                </div>
+              </div>
+              <div class="demo-after">
+              <p class="demo-basis">見ているもの：正しく残せたか、決めるまでの時間　／　使っている知見：<b>再認は再生より速い</b>（Recognition over Recall）</p>
+              <p class="demo-explain">「はい / いいえ」は質問への返事で、押した後に何が起きるかは書かれていない。頭の中で「はい＝破棄＝消える」と組み立て直す必要がある。これが「再生」。右は「編集に戻る / 破棄する」と結果そのものが書いてあり、読んだ瞬間に分かる。これが「再認」。人は思い出すより、見て分かる方が速く、間違えない。</p>
+              </div>
+              <button class="demo-reset" data-reset="alert">RESET</button>
+            </div>
+            <div class="demo-slide" data-title="TRY 3/3 — 迷うUI / 迷わないUI">
+              <p class="demo-task">見知らぬパソコンに繋がれました。写真や連絡先を<strong>渡さないで</strong>ください。</p>
+              <div class="demo-pair">
+                <div class="demo-panel ios" id="trust-a">
+                  <div class="demo-panel-head"><span>よくある画面</span><span class="al-time">0.0 秒</span></div>
+                  <div class="ph al-ph"></div>
+                  <div class="demo-result"></div>
+                </div>
+                <div class="demo-panel ios" id="trust-b">
+                  <div class="demo-panel-head"><span>止まらせる画面</span><span class="al-time">0.0 秒</span></div>
+                  <div class="ph al-ph"></div>
+                  <div class="demo-result"></div>
+                </div>
+              </div>
+              <div class="demo-after">
+              <p class="demo-basis">見ているもの：反射で押さなかったか、止まれた時間　／　使っている知見：<b>デフォルト効果</b>と、<b>色による注意の切り替え</b></p>
+              <p class="demo-explain">左は、いつもの青いボタンが太字で待っている。人は「太字の青＝いつもの正解」と学習しているので、読まずに押す（デフォルト効果）。右は、取り返しのつかない方だけ赤くし、押すと何が起きるかを一行添えた。赤は「いつもと違う」の合図で、注意を一度こちらに引き戻す。ここまでのデモは速さを競ったが、大事な選択だけは逆で、止まれることが価値になる。</p>
+              </div>
+              <button class="demo-reset" data-reset="trust">RESET</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="principle-card reveal">
-        <div class="principle-num">03 / Empathy</div>
-        <h3 class="principle-name">ユーザーの<br><span class="accent">"認知"</span>に寄り添う</h3>
-        <p class="principle-desc">認知心理学に基づき、視認性とストレスに配慮した設計を。「迷わない・疲れない」UIは、操作のためでなくユーザーを助けるためのもの。ダークパターンに頼らない、誠実なものづくりです。</p>
+    </div>
+
+    <div class="principle reveal">
+      <div class="principle-num">03</div>
+      <div>
+        <h3 class="principle-name">減らすのは<em>手間</em>、機能ではない</h3>
+        <p class="principle-desc">判断の数だけ、脳は疲れる。だから取捨選択を減らす。目的までの距離を縮めるためなら、ボタンは足します。</p>
+
+        <div class="demo has-slides" id="demo03">
+          <div class="demo-head-row">
+            <div class="demo-label"><span class="slide-title">TRY 1/2 — ボタンを一つ足す</span></div>
+            <div class="demo-arrows">
+              <button class="demo-arrow" data-slide="-1" aria-label="前のデモ" disabled>‹</button>
+              <button class="demo-arrow" data-slide="1" aria-label="次のデモ">›</button>
+            </div>
+          </div>
+          <div class="demo-slides">
+            <div class="demo-slide on" data-title="TRY 1/2 — ボタンを一つ足す">
+          <p class="demo-task"><strong>自宅から職場まで</strong>の経路を検索してください。</p>
+          <div class="demo-pair">
+            <div class="demo-panel ios" id="route-a">
+              <div class="demo-panel-head"><span>よくある画面</span><span class="rt-taps">0 タップ</span></div>
+              <div class="ph rt-ph"></div>
+              <div class="demo-result"></div>
+            </div>
+            <div class="demo-panel ios" id="route-b">
+              <div class="demo-panel-head"><span>ボタンを足した画面</span><span class="rt-taps">0 タップ</span></div>
+              <div class="ph rt-ph"></div>
+              <div class="demo-result"></div>
+            </div>
+          </div>
+          <div class="demo-after">
+              <p class="demo-explain">右は、左に「よく使う経路」を一段足しただけ。下の検索フォームはそのまま残っています。機能は増えて、手間は減った。減らすのは、機能ではなく手間です。</p>
+              </div>
+              <button class="demo-reset" data-reset="choice">RESET</button>
+            </div>
+            <div class="demo-slide" data-title="TRY 2/2 — 見せる数と、決めるまでの時間">
+              <p class="demo-task">メニューから飲みたいものを<strong>1つ</strong>選んでください。2つの画面で1回ずつ、選ぶまでの時間を比べます。</p>
+              <div class="pick" id="pick">
+                <div class="pick-steps"><span class="on">1</span><span>2</span><span>結果</span></div>
+                <div class="ph pick-ph"></div>
+              </div>
+              <div class="demo-after">
+              <p class="demo-explain">どちらの画面でも、選べるのは同じ12種類。2つ目の「おすすめ」には、あなたが1つ目で選んだものと、よく頼まれるものが並びます。実際のアプリなら、注文履歴から同じことができる。並べ替えただけで、決めるまでの時間が変わります。</p>
+              </div>
+              <button class="demo-reset" data-reset="drink">RESET</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="services">
-  <div class="container">
-    <div class="section-label">Services & Stack</div>
-    <h2 class="section-title">提供できる<em>こと</em>。</h2>
-    <div class="divider"></div>
-    <p class="services-intro">iOSアプリの企画・設計・開発・申請まで、そしてWEBサイトの制作まで。<br>個人開発だからこその一貫性と速度で、想いを形にします。</p>
-    <div class="services-grid">
-      <div class="service-card reveal">
-        <div class="service-icon">01 / iOS App</div>
-        <div class="service-name">iOSアプリ開発</div>
-        <p class="service-desc">SwiftUIを中心に、Widget・通知・課金まで対応。Human Interface Guidelinesと認知心理学を融合させた、迷わず使える設計。App Store審査・リリースまで一貫サポート。</p>
-        <div class="service-tags">
-          <span class="tag">Swift</span>
-          <span class="tag">SwiftUI</span>
-          <span class="tag">WidgetKit</span>
-          <span class="tag">SwiftData</span>
-          <span class="tag">MapKit</span>
-          <span class="tag">StoreKit 2</span>
-        </div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">02 / Web Design</div>
-        <div class="service-name">WEB制作</div>
-        <p class="service-desc">想いが正しく伝わるWEBサイトを。コーポレートサイト、ポートフォリオ、LPまで。視覚的階層・タイポグラフィ・余白の設計を意識し、ユーザーが自然に読み進める導線を構築します。</p>
-        <div class="service-tags">
-          <span class="tag">HTML/CSS</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">Figma</span>
-          <span class="tag">Responsive</span>
-          <span class="tag">SEO</span>
-        </div>
-      </div>
-      <div class="service-card reveal">
-        <div class="service-icon">03 / UI / UX</div>
-        <div class="service-name">UI / UX 設計</div>
-        <p class="service-desc">ユーザーの視認性とストレスに配慮したインターフェース設計。認知負荷を最小化する情報設計、「迷わない・疲れない」導線を、Figmaを使ったプロトタイプで具体化します。</p>
-        <div class="service-tags">
-          <span class="tag">Figma</span>
-          <span class="tag">Prototype</span>
-          <span class="tag">UX Research</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+<!-- WORK -->
 <section id="work">
   <div class="container">
     <div class="section-label">Selected Work</div>
@@ -1076,12 +848,8 @@
 
       <div class="work-item">
         <div class="work-screens">
-          <div class="phone-frame phone1">
-            <img src="images/Group%20208.png" alt="関西万博マップアプリ メイン画面">
-          </div>
-          <div class="phone-frame phone2">
-            <img src="images/IMG_3298.PNG" alt="関西万博マップアプリ サブ画面">
-          </div>
+          <div class="phone-frame phone1"><img src="images/Group%20208.png" alt="関西万博マップアプリ メイン画面"></div>
+          <div class="phone-frame phone2"><img src="images/IMG_3298.PNG" alt="関西万博マップアプリ サブ画面"></div>
         </div>
         <div class="work-body">
           <div class="app-label">Expo Map · Travel</div>
@@ -1105,12 +873,8 @@
 
       <div class="work-item">
         <div class="work-screens">
-          <div class="phone-frame phone1">
-            <img src="images/Group%20150.png" alt="ギンガゲーム メイン画面">
-          </div>
-          <div class="phone-frame phone2">
-            <img src="images/Group%20147.png" alt="ギンガゲーム ゲームプレイ画面">
-          </div>
+          <div class="phone-frame phone1"><img src="images/Group%20150.png" alt="ギンガゲーム メイン画面"></div>
+          <div class="phone-frame phone2"><img src="images/Group%20147.png" alt="ギンガゲーム ゲームプレイ画面"></div>
         </div>
         <div class="work-body">
           <div class="app-label">Casual Puzzle · Game</div>
@@ -1129,21 +893,14 @@
             <div class="work-meta-item"><strong>Period</strong>2ヶ月</div>
             <div class="work-meta-item"><strong>Stack</strong>SwiftUI · SpriteKit · AdMob</div>
           </div>
-          <a href="https://apps.apple.com/jp/app/%E3%82%AE%E3%83%B3%E3%82%AC%E3%82%B2%E3%83%BC%E3%83%A0/id6751226633" class="appstore-btn" target="_blank" rel="noopener">
-            <span class="appstore-logo"></span>
-            App Store で見る
-          </a>
+          <a href="https://apps.apple.com/jp/app/%E3%82%AE%E3%83%B3%E3%82%AC%E3%82%B2%E3%83%BC%E3%83%A0/id6751226633" class="appstore-btn" target="_blank" rel="noopener"><span class="appstore-logo"></span>App Store で見る</a>
         </div>
       </div>
 
       <div class="work-item">
         <div class="work-screens">
-          <div class="phone-frame phone1">
-            <img src="images/Group%20202.jpg" alt="CleanWars.io メイン画面">
-          </div>
-          <div class="phone-frame phone2">
-            <img src="images/Group%20204.jpg" alt="CleanWars.io ランキング画面">
-          </div>
+          <div class="phone-frame phone1"><img src="images/Group%20202.jpg" alt="CleanWars.io メイン画面"></div>
+          <div class="phone-frame phone2"><img src="images/Group%20204.jpg" alt="CleanWars.io ランキング画面"></div>
         </div>
         <div class="work-body">
           <div class="app-label">Lifestyle · Game</div>
@@ -1157,185 +914,232 @@
             <li><strong>まとめて削除方式</strong>選択した写真は最後に一括削除。誤操作の不安なく整理できる</li>
           </ul>
           <p>写真フォルダを眺めていても消す決断ができない——そんな心理的ハードルを、認知心理学の視点で解決した一作。「一覧で見ると消せない写真も、一枚に集中すると判断できる」というユーザー心理を活用しました。</p>
+
+          <!-- CleanWars 体験デモ -->
+          <div class="cw-demo" id="cw">
+            <div class="demo-label">TRY — 6枚だけ、整理してみる</div>
+            <div class="cw-play">
+              <div class="cw-stage">
+                <span class="cw-hint l">← 捨てる</span>
+                <span class="cw-hint r">残す →</span>
+                <div class="cw-stack" id="cwStack"></div>
+              </div>
+              <div class="cw-progress" id="cwProgress"></div>
+              <div class="cw-actions">
+                <button class="demo-btn del" data-cw="del">捨てる</button>
+                <button class="demo-btn keep" data-cw="keep">残す</button>
+              </div>
+              <div class="cw-status">
+                <span>削除 <b class="cw-mb">0</b> MB</span>
+                <button class="cw-undo" data-cw-undo disabled>← ひとつ戻す</button>
+              </div>
+              <div class="cw-keys">← / → キーでも操作できます</div>
+            </div>
+            <div class="cw-result">
+              <div class="demo-panel-head"><span>Result</span></div>
+              <div class="cw-score"><span class="cw-final">0</span><small>MB 削除</small></div>
+              <ul class="cw-rank"></ul>
+              <p class="demo-explain">捨てた量が、そのままスコア。片付けるほど順位が上がる。一枚ずつ見せるのは、一覧だと決められないから。</p>
+              <button class="demo-reset" data-reset="cw">RESET</button>
+            </div>
+          </div>
+
           <div class="work-meta">
             <div class="work-meta-item"><strong>Category</strong>ライフスタイル・ユーティリティ</div>
             <div class="work-meta-item"><strong>Period</strong>2ヶ月</div>
             <div class="work-meta-item"><strong>Stack</strong>SwiftUI · PhotoKit · Firebase</div>
           </div>
-          <a href="https://apps.apple.com/jp/app/cleanwars-io/id6761100596" class="appstore-btn" target="_blank" rel="noopener">
-            <span class="appstore-logo"></span>
-            App Store で見る
+          <a href="https://apps.apple.com/jp/app/cleanwars-io/id6761100596" class="appstore-btn" target="_blank" rel="noopener"><span class="appstore-logo"></span>App Store で見る</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section id="why-me">
+  <div class="container">
+    <div class="section-label">Approach</div>
+    <h2 class="section-title">課題は、要望の<em>裏側</em>にある。</h2>
+    <div class="divider"></div>
+    <p class="why-lead reveal">「この機能が欲しい」の奥にある「本当は何に困っているか」から始めます。3本とも、作りたいからではなく、問題を見つけたから作りました。</p>
+    <div class="case-list reveal">
+      <button class="case">
+        <span class="case-top"><span class="case-req">「公式より速いマップが欲しい」</span><span class="case-plus"></span></span>
+        <span class="case-body"><span class="case-inner"><span class="case-why">会場の電波が弱く、通信前提の公式マップが開かない</span><span class="case-sol">完全オフラインで動くマップ</span></span></span>
+      </button>
+      <button class="case">
+        <span class="case-top"><span class="case-req">「写真を一括で消したい」</span><span class="case-plus"></span></span>
+        <span class="case-body"><span class="case-inner"><span class="case-why">一覧で見ると、どれも消せない気がしてしまう</span><span class="case-sol">一枚ずつ集中して判断できる形</span></span></span>
+      </button>
+      <button class="case">
+        <span class="case-top"><span class="case-req">「もっと派手な合体演出が欲しい」</span><span class="case-plus"></span></span>
+        <span class="case-body"><span class="case-inner"><span class="case-why">欲しいのは演出ではなく、大きくなっていく達成感</span><span class="case-sol">惑星から銀河までのスケール設計</span></span></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="container">
+    <div class="section-label">Process</div>
+    <h2 class="section-title">進め方。</h2>
+    <div class="divider"></div>
+    <div class="timeline">
+      <div class="tl-step reveal">
+        <div class="tl-num">01</div>
+        <div class="tl-body">
+          <h4>相談</h4>
+          <p>アイデア段階で構いません。作りたいこと、困っていること、予算感を聞かせてください。</p>
+          <div class="tl-meta"><span>オンライン 30〜60分</span><span>無料</span></div>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">02</div>
+        <div class="tl-body">
+          <h4>要件・見積もり</h4>
+          <p>機能と画面を一覧にし、期間と費用を提示します。納得いただけたら着手。</p>
+          <div class="tl-meta"><span>機能一覧</span><span>見積書</span></div>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">03</div>
+        <div class="tl-body">
+          <h4>設計</h4>
+          <p>Figmaで画面を作り、指で触れるプロトタイプで確認してから、コードを書きます。</p>
+          <div class="tl-meta"><span>Figma</span><span>触れるプロトタイプ</span></div>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">04</div>
+        <div class="tl-body">
+          <h4>開発</h4>
+          <p>2週間ごとに実機で確認していただき、ズレをその場で潰します。</p>
+          <div class="tl-meta"><span>TestFlight</span><span>2週間サイクル</span></div>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">05</div>
+        <div class="tl-body">
+          <h4>リリース</h4>
+          <p>審査申請から、リジェクト時の対応・再申請まで引き受けます。</p>
+          <div class="tl-meta"><span>App Store</span><span>審査対応込み</span></div>
+        </div>
+      </div>
+      <div class="tl-step reveal">
+        <div class="tl-num">06</div>
+        <div class="tl-body">
+          <h4>その後</h4>
+          <p>リリース後1ヶ月は不具合対応を無償で。継続的な改善は月額で。</p>
+          <div class="tl-meta"><span>1ヶ月 無償対応</span><span>月額保守</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-label">About</div>
+    <h2 class="section-title about-brand"><b>Toggle</b>Studio</h2>
+    <div class="divider"></div>
+    <p class="about-text reveal">日本国内で、iOSアプリの開発と既存Webサイトの改善をしています。デザインは身なりであり、すべてに理由があり、減らすのは手間であって機能ではない。この3つを守って作っています。</p>
+    <div class="about-stats reveal">
+      <div><div class="stat-num" data-count="3">0</div><div class="stat-label">Apps Released</div></div>
+      <div><div class="stat-num" data-count="30">0</div><div class="stat-label">Days · Fastest Release</div></div>
+      <div><div class="stat-num" data-count="1">0</div><div class="stat-label">Person · Start to Finish</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-main">
+        <div class="section-label">Contact</div>
+        <h2 class="contact-title">まず、<em>話しましょう</em>。</h2>
+        <p class="contact-sub">アイデアの段階でも構いません。<br>ご依頼・ご相談は、Instagram の DM かメールで。通常24時間以内に返信します。</p>
+        <div class="contact-actions">
+          <a class="cta primary" href="https://www.instagram.com/toggle_studio_" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Instagram の DM で相談
+          </a>
+          <a class="cta" href="mailto:contact@togglestudio.jp">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            メールで相談
           </a>
         </div>
       </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="why-japan">
-  <div class="why-japan-bg"></div>
-  <div class="container">
-    <div class="why-japan-grid">
-      <div class="reveal">
-        <div class="why-japan-symbol">和</div>
-        <div class="why-japan-symbol-sub">Made in Japan</div>
-      </div>
-      <div class="reveal">
-        <div class="section-label">Why Japan</div>
-        <h2 class="section-title">なぜ、<br><em>日本産</em>なのか。</h2>
-        <div class="divider"></div>
-        <p style="color: var(--muted); margin-bottom: 2rem; line-height: 1.9;">海外製アプリにありがちな過剰なデータ収集や、ストレスの限度を超えた広告。それらを目にするたびに、「ユーザーに寄り添うとは何か」を考えてきました。日本国内で開発・運営することは、私にとってその答えのひとつです。</p>
-        <div class="why-japan-points">
-          <div class="why-point">
-            <div class="why-point-num">01</div>
-            <div>
-              <h4>誠実なデータ取り扱い</h4>
-              <p>必要なデータのみを、必要な分だけ。海外サーバーへの不必要な送信は行わず、ユーザーのプライバシーを最優先に設計しています。</p>
-            </div>
-          </div>
-          <div class="why-point">
-            <div class="why-point-num">02</div>
-            <div>
-              <h4>ストレスに配慮した広告量</h4>
-              <p>収益化と体験のバランスを丁寧に設計。広告は最小限に抑え、ユーザーの集中とリラックスを邪魔しない範囲に留めます。</p>
-            </div>
-          </div>
-          <div class="why-point">
-            <div class="why-point-num">03</div>
-            <div>
-              <h4>日本語での迅速なサポート</h4>
-              <p>不具合・要望・お問い合わせには、日本語で迅速に対応。海外製アプリでありがちな、サポート不在の不安はありません。</p>
-            </div>
-          </div>
+      <div class="contact-side">
+        <div class="side-block">
+          <div class="side-label">Email</div>
+          <a class="side-link" href="mailto:contact@togglestudio.jp">contact@togglestudio.jp</a>
+        </div>
+        <div class="side-block">
+          <div class="side-label">Instagram</div>
+          <a class="side-link" href="https://www.instagram.com/toggle_studio_" target="_blank" rel="noopener">@toggle_studio_</a>
+        </div>
+        <div class="side-block">
+          <div class="side-label">Services</div>
+          <ul class="side-list">
+            <li>iOSアプリ開発</li>
+            <li>Webサイトのデザイン改善</li>
+            <li>Webサイトを簡単に更新できるツールの開発</li>
+            <li>その他ツール開発</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
-</section>
-
-<section id="process">
-  <div class="container">
-    <div class="section-label">How I Work</div>
-    <h2 class="section-title">プロジェクトの<em>進め方</em>。</h2>
-    <div class="divider"></div>
-    <div class="process-steps">
-      <div class="process-step reveal">
-        <div class="step-num">01</div>
-        <div class="step-content">
-          <h4>無料相談・ヒアリング</h4>
-          <p>アイデア段階でも構いません。作りたいもの・ターゲットユーザー・ご予算の目線合わせを行います。オンライン(30〜60分)で、気軽にどうぞ。</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">02</div>
-        <div class="step-content">
-          <h4>要件定義・見積もり</h4>
-          <p>ヒアリング内容をもとに機能一覧・画面構成を整理し、開発期間と費用の見積もりをご提示します。納得いただけたら契約へ。</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">03</div>
-        <div class="step-content">
-          <h4>UIデザイン・プロトタイプ</h4>
-          <p>Figmaでワイヤーフレーム → 高精度デザインを作成。実機に近いプロトタイプでイメージを確認してから、開発に着手します。</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">04</div>
-        <div class="step-content">
-          <h4>開発・中間確認</h4>
-          <p>2週間スプリントで進捗を共有。TestFlightを使い、実機で動作確認しながらフィードバックを反映。認識のズレを早期に解消します。</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">05</div>
-        <div class="step-content">
-          <h4>審査申請・リリース</h4>
-          <p>App Store Connectの設定、スクリーンショット、説明文の最適化まで対応。審査リジェクト時の対応・再申請もサポートします。</p>
-        </div>
-      </div>
-      <div class="process-step reveal">
-        <div class="step-num">06</div>
-        <div class="step-content">
-          <h4>リリース後サポート</h4>
-          <p>リリース後1ヶ月は不具合対応を無償で実施。継続的なアップデートや機能追加は、月額保守プランでご提供しています。</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="contact-bg"></div>
-  <div class="container">
-    <div class="contact-inner">
-      <div class="section-label" style="justify-content: center;">Contact</div>
-      <h2 class="contact-title">まず、<em>話しましょう</em>。</h2>
-      <p class="contact-sub">アイデアの段階でも、他社で断られた案件でも、お気軽にご相談ください。<br>通常24時間以内に返信します。</p>
-      <a href="mailto:contact@togglestudio.dev" class="contact-email">contact@togglestudio.dev</a>
-      <div class="contact-socials">
-        <a href="https://github.com/ToggleStudio" class="social-link" target="_blank" rel="noopener">GitHub</a>
-        <a href="#" class="social-link" target="_blank" rel="noopener">X (Twitter)</a>
-        <a href="#" class="social-link" target="_blank" rel="noopener">App Store</a>
-      </div>
-    </div>
-  </div>
+  <div class="wordmark" aria-hidden="true"><b>Toggle</b>Studio</div>
 </section>
 
 <footer>
-  <span>© 2026 ToggleStudio. All rights reserved.</span>
-  <span>iOSアプリ開発 · WEB制作 · 日本</span>
+  <span>© 2026 ToggleStudio</span>
+  <span class="foot-links">
+    <a href="https://www.instagram.com/toggle_studio_" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://github.com/ToggleStudio" target="_blank" rel="noopener">GitHub</a>
+    <a href="mailto:contact@togglestudio.jp">Email</a>
+  </span>
 </footer>
 
 <script>
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
+  /* cursor */
+  const cursor = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  function animateCursor() {
+  (function animateCursor() {
     cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
     rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
     ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
     requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
+  })();
 
+  /* nav */
   const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  });
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
+  const ham = document.getElementById('hamburger'), mobileMenu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => { ham.classList.toggle('open'); mobileMenu.classList.toggle('open'); });
+  document.querySelectorAll('.mobile-nav-link').forEach(a => a.addEventListener('click', () => { ham.classList.remove('open'); mobileMenu.classList.remove('open'); }));
 
-  const ham = document.getElementById('hamburger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  ham.addEventListener('click', () => {
-    ham.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-  });
-  document.querySelectorAll('.mobile-nav-link').forEach(a => {
-    a.addEventListener('click', () => {
-      ham.classList.remove('open');
-      mobileMenu.classList.remove('open');
-    });
-  });
-
+  /* reveal */
   const observer = new IntersectionObserver(entries => {
     entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        observer.unobserve(entry.target);
-      }
+      if (entry.isIntersecting) { setTimeout(() => entry.target.classList.add('visible'), i * 80); observer.unobserve(entry.target); }
     });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('.reveal, .work-item, .process-step').forEach(el => observer.observe(el));
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal, .work-item').forEach(el => observer.observe(el));
 
+  /* counter */
   const counterObs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const target = +el.dataset.count;
-      let current = 0;
-      const step = target / 60;
+      const el = entry.target, target = +el.dataset.count;
+      let current = 0; const step = Math.max(target / 40, 0.05);
       const timer = setInterval(() => {
         current = Math.min(current + step, target);
         el.textContent = Math.floor(current) + (el.dataset.suffix || '');
@@ -1346,26 +1150,538 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
 
+  /* hero parallax */
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
-    const hero = document.getElementById('hero');
-    if (y < window.innerHeight) {
-      hero.querySelector('.hero-bg-circle').style.transform = `translateY(${y * 0.3}px)`;
-    }
+    if (y < window.innerHeight) document.querySelector('.hero-bg-circle').style.transform = `translateY(${y * 0.3}px)`;
   });
 
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a');
+  /* active nav */
+  const sections = document.querySelectorAll('section[id]'), navLinks = document.querySelectorAll('.nav-links a');
   window.addEventListener('scroll', () => {
     let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 200) current = s.id;
-    });
-    navLinks.forEach(a => {
-      a.style.color = a.getAttribute('href') === '#' + current
-        ? 'var(--accent)' : '';
-    });
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent)' : ''; });
   });
+
+  /* ═══ Approach アコーディオン ═══ */
+  document.querySelectorAll('.case').forEach(c => c.addEventListener('click', () => c.classList.toggle('open')));
+
+  /* ═══ デモ完了後に説明を表示する共通処理 ═══ */
+  const DONE = {};
+  function demoDone(el, group, need) {
+    const box = el.closest('.demo-slide') || el.closest('.demo');
+    DONE[group] = DONE[group] || new Set(); DONE[group].add(el.id || el);
+    if (DONE[group].size >= need) box.querySelectorAll('.demo-after').forEach(a => a.classList.add('show'));
+  }
+  document.querySelectorAll('[data-reset]').forEach(b => b.addEventListener('click', () => {
+    const box = b.closest('.demo-slide') || b.closest('.demo');
+    box.querySelectorAll('.demo-after').forEach(a => a.classList.remove('show'));
+    delete DONE[b.dataset.reset];
+  }));
+
+  /* ═══ DEMO: 迷うUI / 迷わないUI（iOS風） ═══ */
+  const ICON = {
+    share: '<svg viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 11v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/></svg>',
+    heart: '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+    info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+    trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>',
+    more: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="12" r=".6"/><circle cx="12" cy="12" r=".6"/><circle cx="16" cy="12" r=".6"/></svg>',
+    save: '<svg viewBox="0 0 24 24"><path d="M12 4v11M8 11l4 4 4-4"/><path d="M5 20h14"/></svg>',
+    copy: '<svg viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="12" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>',
+    star: '<svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
+    album: '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 15l4-4 4 4 3-3 5 5"/></svg>',
+    play: '<svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>',
+    hide: '<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10 5.5A9 9 0 0 1 21 12a13 13 0 0 1-2.4 3M6.5 6.5A13 13 0 0 0 3 12a9 9 0 0 0 12 5.3"/></svg>',
+    check: '<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>'
+  };
+  const btn = (cls, icon, label, on) => {
+    const b = document.createElement('button');
+    b.className = 'ph-btn ' + cls; b.innerHTML = icon + (label ? `<span>${label}</span>` : '');
+    b.addEventListener('click', on); return b;
+  };
+  const row = (label, icon, on, cls = '') => {
+    const b = document.createElement('button');
+    b.className = 'ph-row ' + cls; b.innerHTML = `<span>${label}</span>${icon}`;
+    b.addEventListener('click', on); return b;
+  };
+  function setupMaze(panelId, kind) {
+    const panel = document.getElementById(panelId);
+    const ph = panel.querySelector('.ph');
+    const tapsEl = panel.querySelector('.maze-taps');
+    const result = panel.querySelector('.demo-result');
+    let taps = 0, t0 = null, done = false;
+    let tick = null;
+    const tap = () => {
+      if (done) return false;
+      if (t0 === null) { t0 = performance.now(); tick = setInterval(() => { tapsEl.textContent = `${((performance.now() - t0) / 1000).toFixed(1)} 秒`; }, 100); }
+      taps++; return true;
+    };
+    const finish = () => {
+      done = true; clearInterval(tick);
+      const sec = ((performance.now() - t0) / 1000).toFixed(1);
+      tapsEl.textContent = `${sec} 秒`;
+      result.textContent = `${sec} 秒で保存できた（${taps} タップ）`;
+      ph.querySelector('.ph-done').classList.add('on');
+      demoDone(panel, 'maze', 2);
+    };
+    function build() {
+      ph.innerHTML = '';
+      const top = document.createElement('div'); top.className = 'ph-top';
+      top.innerHTML = '<span class="back">写真</span>';
+      const photo = document.createElement('div'); photo.className = 'ph-photo';
+      const bar = document.createElement('div'); bar.className = 'ph-bar';
+      const scrim = document.createElement('div'); scrim.className = 'ph-scrim';
+      const sheet = document.createElement('div'); sheet.className = 'ph-sheet';
+      const doneEl = document.createElement('div'); doneEl.className = 'ph-done';
+      doneEl.innerHTML = `<div>${ICON.check}<span>保存しました</span></div>`;
+      const closeSheet = () => { sheet.classList.remove('open'); scrim.classList.remove('on'); };
+      const openSheet = (title, appsRow, rows) => {
+        sheet.innerHTML = '';
+        sheet.insertAdjacentHTML('beforeend', '<div class="ph-grab"></div>');
+        const head = document.createElement('div'); head.className = 'ph-sheet-head';
+        head.innerHTML = `<b>${title}</b>`;
+        const x = document.createElement('button'); x.className = 'ph-x'; x.textContent = '×';
+        x.addEventListener('click', () => { tap(); closeSheet(); }); head.appendChild(x); sheet.appendChild(head);
+        if (appsRow) {
+          const apps = document.createElement('div'); apps.className = 'ph-apps';
+          [['#0a84ff','AirDrop'],['#30d158','メッセージ'],['#0a84ff','メール'],['#bf5af2','メモ']].forEach(([c,n]) => {
+            const a = document.createElement('div'); a.className = 'ph-app'; a.innerHTML = `<i style="background:${c}"></i>${n}`;
+            a.addEventListener('click', () => tap()); apps.appendChild(a);
+          });
+          sheet.appendChild(apps);
+        }
+        const list = document.createElement('div'); list.className = 'ph-list';
+        rows.forEach(r => list.appendChild(r)); sheet.appendChild(list);
+        sheet.classList.add('open'); scrim.classList.add('on');
+      };
+      scrim.addEventListener('click', () => { tap(); closeSheet(); });
+      const miss = () => tap();
+      if (kind === 'maze') {
+        top.appendChild(btn('icon-only', ICON.more, '', () => {
+          if (!tap()) return;
+          openSheet('', false, [
+            row('複製', ICON.copy, miss), row('非表示', ICON.hide, miss),
+            row('スライドショー', ICON.play, miss), row('アルバムに追加', ICON.album, miss)
+          ]);
+        }));
+        bar.append(
+          btn('', ICON.share, '', () => {
+            if (!tap()) return;
+            openSheet('IMG_0231.jpg', true, [
+              row('コピー', ICON.copy, miss), row('お気に入りに追加', ICON.star, miss),
+              row('アルバムに追加', ICON.album, miss),
+              row('画像を保存', ICON.save, () => { if (tap()) { closeSheet(); finish(); } }),
+              row('スライドショー', ICON.play, miss)
+            ]);
+          }),
+          btn('', ICON.heart, '', miss),
+          btn('', ICON.info, '', miss),
+          btn('red', ICON.trash, '', miss)
+        );
+      } else {
+        bar.append(
+          btn('', ICON.save, '保存', () => { if (tap()) finish(); }),
+          btn('', ICON.share, '共有', miss),
+          btn('red', ICON.trash, '削除', miss)
+        );
+      }
+      ph.append(top, photo, bar, scrim, sheet, doneEl);
+    }
+    build();
+    return () => { clearInterval(tick); taps = 0; t0 = null; done = false; tapsEl.textContent = '0.0 秒'; result.textContent = ''; build(); };
+  }
+  const resetMazeA = setupMaze('maze-a', 'maze');
+  const resetMazeB = setupMaze('maze-b', 'clear');
+  document.querySelector('[data-reset="maze"]').addEventListener('click', () => { resetMazeA(); resetMazeB(); });
+
+  /* ═══ DEMO: ボタンを一つ足す（乗換案内） ═══ */
+  (function () {
+    const PLACES = ['自宅', '職場', '実家', 'よく行くジム'];
+    const RESULT = `
+      <div class="rt-result">
+        <div class="rt-sec">自宅 → 職場</div>
+        <div class="rt-card"><div class="t">24分<small>乗換 1回 · 320円</small></div>
+          <div class="rt-line"><i style="width:40%;background:#0a84ff"></i><i style="width:8px;background:#8e8e93"></i><i style="width:35%;background:#30d158"></i></div></div>
+        <div class="rt-card dim"><div class="t">31分<small>乗換なし · 290円</small></div>
+          <div class="rt-line"><i style="width:80%;background:#ff9f0a"></i></div></div>
+        <div class="rt-card dim"><div class="t">38分<small>乗換 2回 · 260円</small></div>
+          <div class="rt-line"><i style="width:25%;background:#0a84ff"></i><i style="width:8px;background:#8e8e93"></i><i style="width:25%;background:#bf5af2"></i><i style="width:8px;background:#8e8e93"></i><i style="width:20%;background:#30d158"></i></div></div>
+      </div>`;
+
+    function setupRoute(panelId, withFav) {
+      const panel = document.getElementById(panelId);
+      const ph = panel.querySelector('.rt-ph');
+      const tapsEl = panel.querySelector('.rt-taps');
+      const result = panel.querySelector('.demo-result');
+      let taps = 0, done = false, from = '', to = '';
+      const tap = () => { if (done) return false; taps++; tapsEl.textContent = `${taps} タップ`; return true; };
+
+      function build() {
+        taps = 0; done = false; from = ''; to = '';
+        tapsEl.textContent = '0 タップ'; result.textContent = '';
+        ph.innerHTML = '<div class="rt-nav">乗換案内</div><div class="rt-body"></div><div class="ph-scrim"></div><div class="ph-sheet"></div>';
+        const body = ph.querySelector('.rt-body'), scrim = ph.querySelector('.ph-scrim'), sheet = ph.querySelector('.ph-sheet');
+        const closeSheet = () => { sheet.classList.remove('open'); scrim.classList.remove('on'); };
+        scrim.addEventListener('click', () => { tap(); closeSheet(); });
+
+        const finish = () => {
+          done = true;
+          ph.insertAdjacentHTML('beforeend', RESULT);
+          result.textContent = `検索できた — ${taps} タップ`;
+          demoDone(panel, 'choice', 2);
+        };
+
+        if (withFav) {
+          body.insertAdjacentHTML('beforeend', '<div class="rt-sec" style="margin-top:0">よく使う経路</div><div class="rt-fav"></div>');
+          const fav = body.querySelector('.rt-fav');
+          [['自宅 → 職場', '24分 · 乗換1回'], ['職場 → 自宅', '25分 · 乗換1回']].forEach(([t, s], k) => {
+            const b = document.createElement('button'); b.innerHTML = `<b>${t}</b><small>${s}</small>`;
+            b.addEventListener('click', () => { if (!tap()) return; if (k === 0) finish(); });
+            fav.appendChild(b);
+          });
+        }
+        body.insertAdjacentHTML('beforeend', `<div class="rt-sec"${withFav ? '' : ' style="margin-top:0"'}>経路を検索</div>
+          <div class="rt-form">
+            <button class="rt-field from"><i></i><span class="val">出発地</span></button>
+            <button class="rt-field to"><i></i><span class="val">到着地</span></button>
+          </div>
+          <button class="rt-search" disabled>検索</button>`);
+        const fFrom = body.querySelector('.rt-field.from'), fTo = body.querySelector('.rt-field.to'), search = body.querySelector('.rt-search');
+        const check = () => { search.disabled = !(from && to); };
+        const openPicker = (which) => {
+          sheet.innerHTML = `<div class="ph-grab"></div><div class="ph-sheet-head"><b>${which === 'from' ? '出発地' : '到着地'}</b></div><div class="rt-sec" style="margin:2px 12px 4px">履歴</div><div class="ph-list"></div>`;
+          const list = sheet.querySelector('.ph-list');
+          PLACES.forEach(p => {
+            const r = document.createElement('button'); r.className = 'ph-row'; r.innerHTML = `<span>${p}</span>`;
+            r.addEventListener('click', () => {
+              if (!tap()) return; closeSheet();
+              const f = which === 'from' ? fFrom : fTo;
+              if (which === 'from') from = p; else to = p;
+              f.classList.add('filled'); f.querySelector('.val').textContent = p; check();
+            });
+            list.appendChild(r);
+          });
+          sheet.classList.add('open'); scrim.classList.add('on');
+        };
+        fFrom.addEventListener('click', () => { if (tap()) openPicker('from'); });
+        fTo.addEventListener('click', () => { if (tap()) openPicker('to'); });
+        search.addEventListener('click', () => {
+          if (!tap()) return;
+          if (from === '自宅' && to === '職場') finish();
+          else { result.textContent = '自宅 → 職場 ではありません'; search.disabled = false; }
+        });
+      }
+      build();
+      return build;
+    }
+    const resetA = setupRoute('route-a', false);
+    const resetB = setupRoute('route-b', true);
+    document.querySelector('[data-reset="choice"]').addEventListener('click', () => { resetA(); resetB(); });
+  })();
+
+  /* ═══ デモ内スライド切替（共通） ═══ */
+  document.querySelectorAll('.demo.has-slides').forEach(root => {
+    const slides = [...root.querySelectorAll('.demo-slide')];
+    const title = root.querySelector('.slide-title');
+    const prev = root.querySelector('[data-slide="-1"]'), next = root.querySelector('[data-slide="1"]');
+    let cur = 0;
+    const go = n => {
+      cur = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+      title.textContent = slides[cur].dataset.title;
+      prev.disabled = cur === 0; next.disabled = cur === slides.length - 1;
+    };
+    prev.addEventListener('click', () => go(cur - 1));
+    next.addEventListener('click', () => go(cur + 1));
+  });
+
+  /* ═══ DEMO: アラート系（ラベル / 大事な選択） ═══ */
+  (function () {
+    const USB = '<svg viewBox="0 0 24 24"><rect x="7" y="9" width="10" height="12" rx="2"/><path d="M12 3v6M9 6l3-3 3 3"/></svg>';
+    const LOCK = '<svg viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="10" rx="2"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>';
+    const SCREENS = {
+      memo: {
+        nav: '<b>メモ</b><button class="al-close">閉じる</button>',
+        body: '<div class="al-body">買い物リスト<br>・牛乳<br>・卵<br>・食パン<br>・コーヒー豆<span class="cur"></span></div><div class="al-gone">メモは空です</div>',
+        trigger: '.al-close',
+        okText: s => `メモは残った — ${s} 秒`, ngText: s => `メモが消えた — ${s} 秒`,
+        onNg: ph => { ph.querySelector('.al-gone').classList.add('on'); ph.querySelector('.al-body').style.display = 'none'; }
+      },
+      usb: {
+        nav: '<b>&nbsp;</b>',
+        body: `<div class="al-body usb">${USB}<div>パソコンに接続されました</div><button class="al-close" style="margin-top:6px">続ける</button></div><div class="al-gone">写真と連絡先を渡しました</div>`,
+        trigger: '.al-close',
+        okText: s => `渡さなかった — ${s} 秒`, ngText: s => `渡してしまった — ${s} 秒`,
+        onOk: ph => { const b = ph.querySelector('.al-body'); b.innerHTML = `${LOCK}<div>このコンピュータは<br>信頼されていません</div><small style="font-size:10px;color:#636366">写真・連絡先にはアクセスできません</small>`; },
+        onNg: ph => { ph.querySelector('.al-gone').classList.add('on'); ph.querySelector('.al-body').style.display = 'none'; }
+      }
+    };
+    const ALERTS = {
+      memoVague: `<div class="t">変更を破棄しますか？</div><div class="m"> </div>
+        <div class="al-btns"><button class="al-btn" data-k="ng">はい</button><button class="al-btn bold" data-k="ok">いいえ</button></div>`,
+      memoClear: `<div class="t">書きかけのメモを破棄しますか？</div><div class="m">保存していない内容は失われます。</div>
+        <div class="al-btns stack"><button class="al-btn bold" data-k="ok">編集に戻る</button><button class="al-btn red" data-k="ng">破棄する</button></div>`,
+      trustVague: `<div class="t">このコンピュータを信頼しますか？</div><div class="m">設定やデータにアクセスできるようになります。</div>
+        <div class="al-btns"><button class="al-btn bold" data-k="ng">信頼</button><button class="al-btn" data-k="ok">信頼しない</button></div>`,
+      trustClear: `<div class="t">このコンピュータを信頼しますか？</div><div class="m">信頼すると、このパソコンから写真・連絡先・バックアップにアクセスできます。取り消すには設定のリセットが必要です。</div>
+        <div class="al-btns stack"><button class="al-btn bold" data-k="ok">信頼しない</button><button class="al-btn red" data-k="ng">信頼する</button></div>`
+    };
+    function setupAlert(panelId, screen, alert, group) {
+      const panel = document.getElementById(panelId);
+      const ph = panel.querySelector('.al-ph');
+      const timeEl = panel.querySelector('.al-time');
+      const result = panel.querySelector('.demo-result');
+      let t0 = null, tick = null, done = false;
+      function build() {
+        clearInterval(tick); t0 = null; done = false; timeEl.textContent = '0.0 秒'; result.textContent = '';
+        ph.innerHTML = `<div class="al-nav">${screen.nav}</div>${screen.body}<div class="al-dim"><div class="al-box"></div></div>`;
+        const dim = ph.querySelector('.al-dim'), box = ph.querySelector('.al-box');
+        const answer = ok => {
+          if (done) return; done = true; clearInterval(tick);
+          const sec = ((performance.now() - t0) / 1000).toFixed(1);
+          timeEl.textContent = `${sec} 秒`; dim.classList.remove('on');
+          if (ok) { if (screen.onOk) screen.onOk(ph); result.textContent = screen.okText(sec); }
+          else { screen.onNg(ph); result.textContent = screen.ngText(sec); }
+          demoDone(panel, group, 2);
+        };
+        ph.querySelector(screen.trigger).addEventListener('click', () => {
+          if (t0 !== null) return;
+          box.innerHTML = alert;
+          box.querySelectorAll('[data-k]').forEach(b => b.addEventListener('click', () => answer(b.dataset.k === 'ok')));
+          dim.classList.add('on');
+          t0 = performance.now();
+          tick = setInterval(() => { timeEl.textContent = `${((performance.now() - t0) / 1000).toFixed(1)} 秒`; }, 100);
+        });
+      }
+      build();
+      return build;
+    }
+    const rA = setupAlert('alert-a', SCREENS.memo, ALERTS.memoVague, 'alert');
+    const rB = setupAlert('alert-b', SCREENS.memo, ALERTS.memoClear, 'alert');
+    document.querySelector('[data-reset="alert"]').addEventListener('click', () => { rA(); rB(); });
+    const tA = setupAlert('trust-a', SCREENS.usb, ALERTS.trustVague, 'trust');
+    const tB = setupAlert('trust-b', SCREENS.usb, ALERTS.trustClear, 'trust');
+    document.querySelector('[data-reset="trust"]').addEventListener('click', () => { tA(); tB(); });
+  })();
+
+  /* ═══ DEMO: 見せる数と、決めるまでの時間（12種類 → おすすめ3） ═══ */
+  (function () {
+    const root = document.getElementById('pick');
+    const ph = root.querySelector('.pick-ph');
+    const steps = [...root.querySelectorAll('.pick-steps span')];
+    const drinks = [
+      ['コーヒー','#6b4a2e'],['紅茶','#a0522d'],['水','#5aa9e6'],
+      ['緑茶','#5b8c3e'],['ほうじ茶','#8b5a2b'],['ウーロン茶','#7a4b26'],
+      ['炭酸水','#8fd3f4'],['オレンジ','#f4a238'],['りんご','#c94a4a'],
+      ['ココア','#4e2d1c'],['麦茶','#b07a3a'],['ジンジャー','#d8b04a']
+    ];
+    const POPULAR = ['水', 'コーヒー', '紅茶', 'ウーロン茶'];   /* よく頼まれるもの（選んだものを除いて埋める） */
+    let t0 = 0, times = { all: null, rec: null }, picked = '';
+
+    const setStep = n => steps.forEach((s, k) => { s.classList.toggle('on', k === n); s.classList.toggle('done', k < n); });
+    const nav = t => `<div class="pk-nav">${t}</div>`;
+    const item = ([name, color], on) => {
+      const b = document.createElement('button'); b.className = 'pk-item';
+      b.innerHTML = `<i style="background:${color}"></i><span>${name}</span>`;
+      b.addEventListener('click', () => on(b, name)); return b;
+    };
+    const chosen = (b, key, name, next) => {
+      times[key] = (performance.now() - t0) / 1000;
+      if (key === 'all') picked = name;
+      ph.querySelectorAll('.pk-item').forEach(x => x.disabled = true);
+      b.classList.add('sel');
+      setTimeout(next, 550);
+    };
+    function start() { times = { all: null, rec: null }; picked = ''; intro(0); }
+    function intro(k) {
+      setStep(k);
+      ph.innerHTML = nav('ドリンク') + `<div class="pk-intro"><div><b>${k === 0 ? '1つ目の画面' : '2つ目の画面'}</b><p>${k === 0 ? '飲みたいものを、1つ' : '同じ12種類。並べ方だけ違います'}</p></div><button class="pk-go">${k === 0 ? 'はじめる' : '次へ'}</button></div>`;
+      ph.querySelector('.pk-go').addEventListener('click', () => k === 0 ? screenAll() : screenRec());
+    }
+    function screenAll() {
+      ph.innerHTML = nav('ソフトドリンク') + '<div class="pk-body"><div class="pk-grid"></div></div>';
+      const g = ph.querySelector('.pk-grid');
+      drinks.forEach(d => g.appendChild(item(d, (b, n) => chosen(b, 'all', n, () => intro(1)))));
+      t0 = performance.now();
+    }
+    function screenRec() {
+      /* おすすめ = 1つ目で選んだもの + よく頼まれるもの2つ */
+      const recNames = [picked, ...POPULAR.filter(p => p !== picked)].slice(0, 3);
+      const rec = recNames.map(n => drinks.find(d => d[0] === n));
+      const rest = drinks.filter(d => !recNames.includes(d[0]));
+      ph.innerHTML = nav('ソフトドリンク') + '<div class="pk-body"><div class="pk-sec">おすすめ</div><div class="pk-grid big"></div></div>';
+      const body = ph.querySelector('.pk-body'), g = ph.querySelector('.pk-grid');
+      rec.forEach(d => g.appendChild(item(d, (b, n) => chosen(b, 'rec', n, result))));
+      const more = document.createElement('button'); more.className = 'pk-item pk-more'; more.innerHTML = '<span>その他のドリンク</span>';
+      more.addEventListener('click', () => {
+        more.remove();
+        body.insertAdjacentHTML('beforeend', '<div class="pk-sec" style="margin-top:12px">その他</div><div class="pk-grid rest"></div>');
+        const r = ph.querySelector('.pk-grid.rest');
+        rest.forEach(d => r.appendChild(item(d, (b, n) => chosen(b, 'rec', n, result))));
+        r.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+      g.appendChild(more);
+      t0 = performance.now();
+    }
+    function result() {
+      setStep(2);
+      demoDone(root, 'drink', 1);
+      const a = times.all, b = times.rec, max = Math.max(a, b), fast = b < a, ratio = a / b;
+      ph.innerHTML = nav('結果') + `
+        <div class="pk-result">
+          <div class="pk-bar ${fast ? '' : 'fast'}"><label><span>12個を全部並べる</span><b>${a.toFixed(1)} 秒</b></label><i data-w="${(a/max*100).toFixed(0)}"></i></div>
+          <div class="pk-bar ${fast ? 'fast' : ''}"><label><span>おすすめ3 + その他9</span><b>${b.toFixed(1)} 秒</b></label><i data-w="${(b/max*100).toFixed(0)}"></i></div>
+          <div class="pk-verdict">${fast
+            ? `<b>${ratio >= 1.15 ? ratio.toFixed(1) + '倍' : '少し'}</b>速く決められました<small>選べる種類は、どちらも12<br>おすすめには、あなたが選んだ「${picked}」が入っていました</small>`
+            : `<b>差は出ませんでした</b><small>選べる種類は、どちらも12<br>それでも最初の画面の情報量は4分の1</small>`}</div>
+          <button class="pk-go" data-again>もう一度</button>
+        </div>`;
+      requestAnimationFrame(() => requestAnimationFrame(() => ph.querySelectorAll('.pk-bar i').forEach(i => i.style.width = i.dataset.w + '%')));
+      ph.querySelector('[data-again]').addEventListener('click', start);
+    }
+    document.querySelector('[data-reset="drink"]').addEventListener('click', start);
+    start();
+  })();
+
+  /* ═══ DEMO: CleanWars スワイプ ═══ */
+  (function () {
+    const root = document.getElementById('cw');
+    const stack = document.getElementById('cwStack');
+    const stage = root.querySelector('.cw-stage');
+    const hintL = root.querySelector('.cw-hint.l'), hintR = root.querySelector('.cw-hint.r');
+    const progress = document.getElementById('cwProgress');
+    const mbEl = root.querySelector('.cw-mb');
+    const undoBtn = root.querySelector('[data-cw-undo]');
+    const actBtns = [...root.querySelectorAll('[data-cw]')];
+    const play = root.querySelector('.cw-play'), res = root.querySelector('.cw-result');
+    const finalEl = root.querySelector('.cw-final'), rankEl = root.querySelector('.cw-rank');
+    const photos = [
+      {n:'IMG_0231', mb:4.2, c:'#3b3f5c'}, {n:'IMG_0232', mb:4.1, c:'#3f3b5c'},
+      {n:'スクショ_0918', mb:1.8, c:'#2f4a4a'}, {n:'IMG_0240', mb:6.7, c:'#5c4a3b'},
+      {n:'IMG_0240 (複製)', mb:6.7, c:'#5c4a3b'}, {n:'VID_0301', mb:48.5, c:'#4a3b5c'}
+    ];
+    /* 全削除 = 72.0MB。最大の他者を 71.4 にして、1枚(最小1.8MB)でも残すと2位以下 */
+    const others = [{n:'Yuki',mb:71.4},{n:'Ren',mb:58.0},{n:'Sora',mb:39.2},{n:'Kai',mb:20.5},{n:'Mio',mb:9.1}];
+    const THRESH = 80;
+    let i = 0, busy = false, decisions = [];
+
+    const deleted = () => decisions.reduce((s, d, k) => s + (d ? photos[k].mb : 0), 0);
+
+    function layout() {
+      [...stack.querySelectorAll('.cw-card:not(.out)')].forEach((c, k) => {
+        c.style.setProperty('--d', Math.min(k, 2));
+        c.classList.toggle('top', k === 0);
+        c.classList.toggle('far', k > 2);
+      });
+      progress.innerHTML = photos.map((_, k) =>
+        `<i class="${k < i ? (decisions[k] ? 'del' : 'keep') : (k === i ? 'cur' : '')}"></i>`).join('');
+      mbEl.textContent = deleted().toFixed(1);
+      undoBtn.disabled = i === 0 || busy;
+      actBtns.forEach(b => b.disabled = busy || i >= photos.length);
+    }
+    function makeCard(p) {
+      const c = document.createElement('div');
+      c.className = 'cw-card new';
+      c.style.background = p.c;
+      c.innerHTML = `<div class="cw-veil del"></div><div class="cw-veil keep"></div>
+        <span class="cw-tag del">捨てる</span><span class="cw-tag keep">残す</span>
+        <div class="cw-card-name">${p.n}</div><div class="cw-card-size">${p.mb} MB</div>`;
+      c.style.setProperty('--d', 3);
+      attachDrag(c);
+      return c;
+    }
+    function build() {
+      stack.innerHTML = '';
+      photos.forEach(p => stack.appendChild(makeCard(p)));
+      stack.getBoundingClientRect();
+      stack.querySelectorAll('.cw-card').forEach(c => c.classList.remove('new'));
+      layout();
+    }
+    /* ドラッグ量に応じたフィードバック */
+    function feedback(c, dx) {
+      const r = Math.min(Math.abs(dx) / THRESH, 1);
+      c.querySelector('.cw-veil.del').style.opacity = dx < 0 ? r : 0;
+      c.querySelector('.cw-veil.keep').style.opacity = dx > 0 ? r : 0;
+      c.querySelector('.cw-tag.del').style.opacity = dx < 0 ? r : 0;
+      c.querySelector('.cw-tag.keep').style.opacity = dx > 0 ? r : 0;
+      hintL.classList.toggle('on', dx < -THRESH); hintR.classList.toggle('on', dx > THRESH);
+    }
+    function decide(del) {
+      if (busy || i >= photos.length) return;
+      busy = true;
+      const top = stack.querySelector('.cw-card.top');
+      decisions[i] = del; i++;
+      feedback(top, del ? -THRESH : THRESH);
+      top.classList.remove('dragging', 'top');
+      top.classList.add('out');
+      top.style.transform = `translateX(${del ? -340 : 340}px) rotate(${del ? -16 : 16}deg)`;
+      layout();
+      setTimeout(() => {
+        top.remove(); hintL.classList.remove('on'); hintR.classList.remove('on');
+        busy = false; layout();
+        if (i >= photos.length) finish();
+      }, 340);
+    }
+    function undo() {
+      if (busy || i === 0) return;
+      busy = true; i--;
+      const p = photos[i], del = decisions[i]; decisions.length = i;
+      const c = makeCard(p);
+      c.style.transform = `translateX(${del ? -340 : 340}px) rotate(${del ? -16 : 16}deg)`;
+      c.style.opacity = 0;
+      stack.prepend(c);
+      c.getBoundingClientRect();
+      c.classList.remove('new'); c.style.transform = ''; c.style.opacity = '';
+      layout();
+      setTimeout(() => { busy = false; layout(); }, 340);
+    }
+    function finish() {
+      const total = +deleted().toFixed(1);
+      play.style.display = 'none'; res.classList.add('show');
+      finalEl.textContent = total.toFixed(1);
+      const all = [...others, {n:'あなた', mb: total, me:true}].sort((a,b) => b.mb - a.mb);
+      rankEl.innerHTML = all.map((u, k) => `<li class="${u.me ? 'me' : ''}"><span>${k+1}</span><span>${u.n}</span><span>${u.mb.toFixed(1)} MB</span></li>`).join('');
+    }
+    actBtns.forEach(b => b.addEventListener('click', () => decide(b.dataset.cw === 'del')));
+    undoBtn.addEventListener('click', undo);
+    root.querySelector('[data-reset="cw"]').addEventListener('click', () => {
+      i = 0; decisions = []; busy = false;
+      res.classList.remove('show'); play.style.display = ''; build();
+    });
+    /* キーボード（デモが見えている間だけ） */
+    let inView = false;
+    new IntersectionObserver(e => { inView = e[0].isIntersecting; }, { threshold: 0.4 }).observe(stage);
+    document.addEventListener('keydown', e => {
+      if (!inView || res.classList.contains('show')) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); decide(true); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); decide(false); }
+      else if (e.key === 'Backspace' || e.key === 'z') { e.preventDefault(); undo(); }
+    });
+    /* ドラッグ（先頭カードのみ） */
+    function attachDrag(c) {
+      let sx = 0, dx = 0, drag = false;
+      c.addEventListener('pointerdown', e => {
+        if (!c.classList.contains('top') || busy) return;
+        drag = true; sx = e.clientX; dx = 0;
+        c.classList.add('dragging'); c.setPointerCapture(e.pointerId);
+      });
+      c.addEventListener('pointermove', e => {
+        if (!drag) return; dx = e.clientX - sx;
+        c.style.transform = `translateX(${dx}px) rotate(${dx / 16}deg)`;
+        feedback(c, dx);
+      });
+      const end = () => {
+        if (!drag) return; drag = false;
+        if (Math.abs(dx) > THRESH) { decide(dx < 0); }
+        else { c.classList.remove('dragging'); c.style.transform = ''; feedback(c, 0); }
+        dx = 0;
+      };
+      c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
+    }
+    build();
+  })();
+
 </script>
 </body>
 </html>
