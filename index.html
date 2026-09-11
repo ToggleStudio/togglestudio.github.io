@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="ToggleStudio — 認知心理学をもとに、使う人の頭を疲れさせないスマホアプリを設計するiOS開発者。アプリ開発と、既存Webサイトの改善。">
+<meta name="description" content="ToggleStudio — 認知心理学をもとに、使う人の頭を疲れさせないスマホアプリを設計するiOS開発者。iOSアプリ開発、UI/UXデザインのアップグレード、非エンジニアが更新し続けられるWebサイトの開発。">
 <title>ToggleStudio — 迷わない。疲れない。</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,10 +119,13 @@
     margin-bottom: 1.2rem; line-height: 2;
     opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.5s forwards;
   }
-  .hero-note {
-    font-size: 0.9rem; color: var(--text-soft); letter-spacing: 0.02em; margin-bottom: 3rem;
+  .hero-services {
+    list-style: none; display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 3rem;
+    font-size: 0.88rem; color: var(--text-soft); letter-spacing: 0.02em;
     opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.55s forwards;
   }
+  .hero-services li { display: flex; align-items: center; gap: 0.7rem; }
+  .hero-services li::before { content: ''; width: 14px; height: 1px; background: var(--accent); flex: none; }
   .hero-cta { opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s 0.65s forwards; }
   .link-arrow {
     color: var(--accent); text-decoration: none; font-size: 0.95rem;
@@ -391,13 +394,13 @@
   .work-intro { max-width: 600px; margin-bottom: 5rem; color: var(--muted); }
   .work-grid { display: flex; flex-direction: column; gap: 7rem; }
   .work-item {
-    display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: center;
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: start;
     opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s;
   }
   .work-item.visible { opacity: 1; transform: none; }
   .work-item:nth-child(even) { direction: rtl; }
   .work-item:nth-child(even) > * { direction: ltr; }
-  .work-screens { position: relative; height: 460px; }
+  .work-screens { position: sticky; top: 110px; height: 460px; }
   .phone-frame {
     position: absolute; width: 200px; background: var(--bg3);
     border: 1px solid var(--border); border-radius: 28px; overflow: hidden;
@@ -431,7 +434,7 @@
   .appstore-logo { font-size: 1.1rem; line-height: 1; }
 
   /* ── CleanWars デモ ── */
-  .cw-demo { background: var(--bg); border: 1px solid var(--border2); padding: 1.6rem; margin: 0 0 2rem; }
+  .cw-demo { background: var(--bg); border: 1px solid var(--border2); padding: 1.6rem; margin: 0 0 2rem; max-width: 520px; }
   .cw-stage { position: relative; height: 260px; margin: 1.2rem 0 0.6rem; user-select: none; -webkit-user-select: none; }
   .cw-hint {
     position: absolute; top: 50%; transform: translateY(-50%);
@@ -565,8 +568,10 @@
   #about { background: var(--bg); }
   .about-text { color: var(--text-soft); max-width: 620px; line-height: 2; margin-bottom: 3rem; }
   .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 620px; padding-top: 3rem; border-top: 1px solid var(--border2); }
-  .stat-num { font-family: var(--mono); font-weight: 500; font-size: 3rem; color: var(--accent); line-height: 1; letter-spacing: 0; }
-  .stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .stat-num { font-family: var(--mono); font-weight: 500; font-size: 3rem; color: var(--accent); line-height: 1; letter-spacing: 0; display: flex; align-items: baseline; gap: 0.25rem; }
+  .stat-num small { font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .stat-label { font-size: 0.85rem; color: var(--text); margin-top: 0.6rem; letter-spacing: 0.02em; }
+  .stat-label span { display: block; font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; letter-spacing: 0; }
 
   /* ── CONTACT ── */
   #contact { background: var(--bg2); position: relative; overflow: hidden; padding-bottom: 0; }
@@ -611,7 +616,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
-    .hero-sub, .hero-note, .hero-cta, .hero-title, .hero-scroll-hint, .reveal, .work-item { opacity: 1; transform: none; }
+    .hero-sub, .hero-services, .hero-cta, .hero-title, .hero-scroll-hint, .reveal, .work-item { opacity: 1; transform: none; }
   }
 
   @media (max-width: 900px) {
@@ -631,7 +636,7 @@
 
     .work-item { grid-template-columns: 1fr; gap: 3rem; }
     .work-item:nth-child(even) { direction: ltr; }
-    .work-screens { height: 380px; }
+    .work-screens { position: relative; top: auto; height: 380px; }
     .phone-frame { width: 170px; }
     .phone1 { left: 10px; }
     .phone2 { left: 130px; }
@@ -683,7 +688,11 @@
   <div class="hero-inner">
     <div class="hero-left">
       <p class="hero-sub">認知心理学をもとに、使う人の頭を疲れさせない<br>スマホアプリのデザイン設計をつくります。</p>
-      <p class="hero-note">アプリ開発と、既存Webサイトの改善。</p>
+      <ul class="hero-services">
+      <li>iOSアプリ開発</li>
+      <li>UI / UXデザインのアップグレード</li>
+      <li>非エンジニアが更新し続けられるWebサイト</li>
+    </ul>
       <div class="hero-cta"><a href="#work" class="link-arrow">制作実績を見る</a></div>
     </div>
     <h1 class="hero-title">迷わない。<br>疲れない。</h1>
@@ -879,19 +888,19 @@
         <div class="work-body">
           <div class="app-label">Casual Puzzle · Game</div>
           <h3>ギンガゲーム</h3>
-          <p>「銀河を合体させよう」をコンセプトに開発した、宇宙をテーマにしたカジュアルパズルゲーム。水星から始まり、惑星や恒星を合体させながら、最終的には「銀河」へと到達する進化型パズル。シンプルな操作性の中に、宇宙の神秘を感じられる世界観を込めました。</p>
+          <p>誰もが知る合体パズルを、宇宙のスケールと自前の物理演算で作り直しました。<br>水星から始まり、惑星や恒星を合体させて、最後は「銀河」へ。全11種類の天体が登場します。ゲームエンジンを使わず、落下・衝突・合体の挙動をすべてコードで書いたことで、従来のこの種のゲームより軽く、速く、気持ちよく動きます。</p>
           <ul class="feature-list">
-            <li><strong>11種類の天体が登場</strong>水星から銀河まで、合体させて宇宙の進化を体感</li>
-            <li><strong>宇宙をイメージした美しいデザイン</strong>神秘的なビジュアルで没入感を演出</li>
-            <li><strong>シンプルでハマる操作性</strong>年齢を問わず誰でも楽しめる設計</li>
-            <li><strong>広告視聴で進化サポート</strong>水星・火星・金星を削除できる任意機能を搭載</li>
-            <li><strong>マルチデバイス対応</strong>iPhone・iPadで最適なピースサイズに自動調整</li>
+            <li><strong>物理挙動をすべて自前実装</strong>ゲームエンジン不使用。処理が軽く、合体の手応えが速い</li>
+            <li><strong>11種類の天体を進化</strong>水星から銀河まで。合体するほど画面がダイナミックに</li>
+            <li><strong>Game Centerで世界ランキング</strong>全世界のプレイヤーとスコアを競う</li>
+            <li><strong>30日でシーズン交代</strong>ランキングが毎月リセット。いつ始めても1位を狙える</li>
+            <li><strong>iPhone・iPad対応</strong>画面サイズに合わせて天体の大きさを自動調整</li>
           </ul>
-          <p>銀河と銀河の合体時には特別な演出を実装し、クリア後もゲームを続行できる仕様に。今後のアップデートでは、巨大ブラックホール誕生の限定イマーシブ動画も予定しています。</p>
+          <p>銀河同士がぶつかったときの演出と、その後もゲームを続けられる設計で、終わりのない達成感を作っています。</p>
           <div class="work-meta">
             <div class="work-meta-item"><strong>Category</strong>ゲーム・パズル</div>
-            <div class="work-meta-item"><strong>Period</strong>2ヶ月</div>
-            <div class="work-meta-item"><strong>Stack</strong>SwiftUI · SpriteKit · AdMob</div>
+            <div class="work-meta-item"><strong>Period</strong>1ヶ月</div>
+            <div class="work-meta-item"><strong>Stack</strong>SwiftUI · GameKit · AdMob</div>
           </div>
           <a href="https://apps.apple.com/jp/app/%E3%82%AE%E3%83%B3%E3%82%AC%E3%82%B2%E3%83%BC%E3%83%A0/id6751226633" class="appstore-btn" target="_blank" rel="noopener"><span class="appstore-logo"></span>App Store で見る</a>
         </div>
@@ -905,13 +914,10 @@
         <div class="work-body">
           <div class="app-label">Lifestyle · Game</div>
           <h3>CleanWars.io</h3>
-          <p>「不必要なもので世界と競え」をコンセプトに開発した、写真整理 × オンライン対戦アプリ。スワイプ操作だけで写真フォルダを整理でき、削除した容量(GB)が世界中のユーザーと競うスコアになります。「片付け」という地味な作業を、ゲーム性と達成感で楽しい体験に変えるのが狙いです。</p>
+          <p>「不必要なもので世界と競え」をコンセプトに開発しました。<br>写真整理 × オンライン対戦アプリ。スワイプ操作だけで写真フォルダを整理でき、削除した容量(GB)が世界中のユーザーと競うスコアになります。「片付け」という地味な作業を、ゲーム性と達成感で楽しい体験に変えるのが狙いです。</p>
           <ul class="feature-list">
             <li><strong>スワイプで直感的に整理</strong>左にスワイプで削除候補へ、右で保持。判断に迷わないシンプルなUI</li>
-            <li><strong>純正写真アプリと連携</strong>アルバムからランダム30枚を表示し、集中して1枚ずつ判断できる</li>
-            <li><strong>削除容量の可視化</strong>これまで削除した合計GB数をホーム画面に表示し、達成感を演出</li>
             <li><strong>世界中のユーザーとスコア競争</strong>削除容量がそのままランキングのスコアに</li>
-            <li><strong>まとめて削除方式</strong>選択した写真は最後に一括削除。誤操作の不安なく整理できる</li>
           </ul>
           <p>写真フォルダを眺めていても消す決断ができない——そんな心理的ハードルを、認知心理学の視点で解決した一作。「一覧で見ると消せない写真も、一枚に集中すると判断できる」というユーザー心理を活用しました。</p>
 
@@ -946,7 +952,7 @@
 
           <div class="work-meta">
             <div class="work-meta-item"><strong>Category</strong>ライフスタイル・ユーティリティ</div>
-            <div class="work-meta-item"><strong>Period</strong>2ヶ月</div>
+            <div class="work-meta-item"><strong>Period</strong>1ヶ月</div>
             <div class="work-meta-item"><strong>Stack</strong>SwiftUI · PhotoKit · Firebase</div>
           </div>
           <a href="https://apps.apple.com/jp/app/cleanwars-io/id6761100596" class="appstore-btn" target="_blank" rel="noopener"><span class="appstore-logo"></span>App Store で見る</a>
@@ -1048,9 +1054,18 @@
     <div class="divider"></div>
     <p class="about-text reveal">日本国内で、iOSアプリの開発と既存Webサイトの改善をしています。デザインは身なりであり、すべてに理由があり、減らすのは手間であって機能ではない。この3つを守って作っています。</p>
     <div class="about-stats reveal">
-      <div><div class="stat-num" data-count="3">0</div><div class="stat-label">Apps Released</div></div>
-      <div><div class="stat-num" data-count="30">0</div><div class="stat-label">Days · Fastest Release</div></div>
-      <div><div class="stat-num" data-count="1">0</div><div class="stat-label">Person · Start to Finish</div></div>
+      <div>
+        <div class="stat-num"><span data-count="30">0</span><small>日</small></div>
+        <div class="stat-label">最速リリース<span>関西万博マップ · 着手から公開まで</span></div>
+      </div>
+      <div>
+        <div class="stat-num"><span data-count="0">0</span><small>社</small></div>
+        <div class="stat-label">仲介業者<span>営業も伝言ゲームも、中間費用もなし</span></div>
+      </div>
+      <div>
+        <div class="stat-num"><span data-count="24">0</span><small>時間</small></div>
+        <div class="stat-label">返信の目安<span>ご相談・ご依頼への一次返信</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1087,8 +1102,9 @@
           <div class="side-label">Services</div>
           <ul class="side-list">
             <li>iOSアプリ開発</li>
+            <li>UI / UXデザインのアップグレード</li>
             <li>Webサイトのデザイン改善</li>
-            <li>Webサイトを簡単に更新できるツールの開発</li>
+            <li>非エンジニアが更新し続けられるWebサイト・ツールの開発</li>
             <li>その他ツール開発</li>
           </ul>
         </div>
@@ -1102,7 +1118,6 @@
   <span>© 2026 ToggleStudio</span>
   <span class="foot-links">
     <a href="https://www.instagram.com/toggle_studio_" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://github.com/ToggleStudio" target="_blank" rel="noopener">GitHub</a>
     <a href="mailto:contact@togglestudio.jp">Email</a>
   </span>
 </footer>
